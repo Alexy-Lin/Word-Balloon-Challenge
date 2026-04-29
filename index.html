@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单词气球网页版</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>单词气球挑战</h1>
+          <p class="subtitle">快乐背单词，打气球，拿星星</p>
+        </div>
+        <div class="top-actions">
+          <button id="backBtn" class="btn warn">返回选单</button>
+          <span class="stat-pill sync-pill">同步: <span id="syncState">未同步</span></span>
+          <button id="soundBtn" class="btn ghost">音效: 开</button>
+          <button id="speechBtn" class="btn ghost">读音: 开</button>
+          <button id="importBtn" class="btn ghost">导入 CSV</button>
+          <button id="exportBtn" class="btn ghost">导出 CSV</button>
+          <input id="fileInput" type="file" accept=".csv" hidden />
+        </div>
+      </header>
+
+      <section id="unitScreen" class="card">
+        <div class="unit-screen-head">
+          <h2>选择学习单元</h2>
+          <div class="manage-actions">
+            <button id="openMarketBtn" class="btn ghost">市场</button>
+            <button id="openAdminBtn" class="btn ghost">单元管理</button>
+          </div>
+        </div>
+        <div id="unitList" class="unit-list"></div>
+      </section>
+
+      <section id="marketScreen" class="card hidden">
+        <div class="manage-head">
+          <h2>车辆与特效市场</h2>
+          <div class="manage-actions">
+            <button id="marketBackBtn" class="btn ghost">返回主页</button>
+          </div>
+        </div>
+        <p class="manage-summary">银币: <span id="marketWalletSilver">0</span> | 金币: <span id="marketWalletGold">0</span></p>
+        <div id="marketList" class="market-list"></div>
+      </section>
+
+      <section id="adminScreen" class="card hidden">
+        <div class="manage-head">
+          <h2>单元与单词管理</h2>
+          <div class="manage-actions">
+            <button id="adminBackBtn" class="btn ghost">返回主页</button>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="admin-pane">
+            <h3>单元列表</h3>
+            <div class="inline-form">
+              <input id="newUnitInput" class="text-input" placeholder="输入新单元名" />
+              <button id="addUnitBtn" class="btn warn">新增单元</button>
+            </div>
+            <div id="adminUnitList" class="admin-unit-list"></div>
+          </div>
+
+          <div class="admin-pane">
+            <h3 id="adminWordTitle">单词管理</h3>
+            <div class="inline-form">
+              <input id="newWordCnInput" class="text-input" placeholder="中文" />
+              <input id="newWordEnInput" class="text-input" placeholder="英文" />
+              <button id="addWordBtn" class="btn warn">新增单词</button>
+            </div>
+            <div class="inline-form">
+              <select id="batchStatusSelect" class="text-input" aria-label="批量设置模式">
+                <option value="0">进度0（英文气球）</option>
+                <option value="1">进度1（中文气球）</option>
+                <option value="2">进度2（简单拼写）</option>
+                <option value="3">进度3（普通拼写）</option>
+                <option value="4">进度4（完成）</option>
+              </select>
+              <button id="batchSetStatusBtn" class="btn ghost">一键设置本单元全部模式</button>
+            </div>
+            <div id="adminWordList" class="admin-word-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="manageScreen" class="card hidden">
+        <div class="manage-head">
+          <h2 id="manageTitle">单元管理</h2>
+          <div class="manage-actions">
+            <button id="manageBackBtn" class="btn ghost">返回选单</button>
+            <button id="startLearnBtn" class="btn warn">开始学习</button>
+            <button id="startReviewBtn" class="btn ghost" disabled>进入复习模式</button>
+          </div>
+        </div>
+        <p id="manageSummary" class="manage-summary">-</p>
+        <p id="reviewCountText" class="manage-summary">复习模式完成次数: 0</p>
+        <div id="manageWordList" class="manage-word-list"></div>
+      </section>
+
+      <section id="gameScreen" class="card hidden">
+        <span id="modeLabel" hidden></span>
+
+        <div class="canvas-wrapper">
+          <!-- 左上角：本局分数 + 银币 + 金币 -->
+          <div class="canvas-overlay canvas-tl">
+            <div class="stat-pill">本局: <span id="sessionScore">0</span></div>
+            <div class="stat-pill">累计银币: <span id="totalScore">0</span></div>
+            <div class="stat-pill">金币: <span id="goldCoins">0</span></div>
+          </div>
+
+          <!-- 右上角：4 模式进度 -->
+          <div class="canvas-overlay canvas-tr">
+            <div class="progress-pill">英文: <span id="progressEn">0/0</span></div>
+            <div class="progress-pill">中文: <span id="progressCn">0/0</span></div>
+            <div class="progress-pill">简单: <span id="progressSimple">0/0</span></div>
+            <div class="progress-pill">普通: <span id="progressNormal">0/0</span></div>
+          </div>
+
+          <!-- 上方中央：题目 -->
+          <div class="canvas-overlay canvas-tc">
+            <h3 id="promptText">-</h3>
+          </div>
+
+          <!-- 下方中央：答对提示 -->
+          <div class="canvas-overlay canvas-bc">
+            <p id="feedback" class="feedback"></p>
+          </div>
+
+          <canvas id="balloonCanvas" width="1100" height="560"></canvas>
+
+          <div id="roadScene" class="road-scene challenge-barrier hidden">
+            <div class="scene-sky"></div>
+            <div class="scene-hills"></div>
+            <div class="scene-label" id="spellingChallengeLabel">前方路障，拼对单词冲过去</div>
+            <div class="road-lane lane-a"></div>
+            <div class="road-lane lane-b"></div>
+            <div class="road-gap" id="roadGap"></div>
+            <div class="road-water" id="roadWater"></div>
+            <div class="road-car" id="roadCar">
+              <div class="car-speed-lines"></div>
+              <svg class="bugatti-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="traceBodyBlue" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#71d7ff" />
+                    <stop offset="34%" stop-color="#36b5f3" />
+                    <stop offset="67%" stop-color="#208fe0" />
+                    <stop offset="100%" stop-color="#1a77cc" />
+                  </linearGradient>
+                  <linearGradient id="traceBodyShade" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.5)" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                  </linearGradient>
+                  <linearGradient id="traceGlass" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#dbf3ff" stop-opacity="0.95" />
+                    <stop offset="45%" stop-color="#8cbfe1" stop-opacity="0.85" />
+                    <stop offset="100%" stop-color="#2b4665" stop-opacity="0.94" />
+                  </linearGradient>
+                  <linearGradient id="traceDark" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#1a293b" />
+                    <stop offset="100%" stop-color="#0c1520" />
+                  </linearGradient>
+                  <radialGradient id="traceTire" cx="50%" cy="50%" r="50%">
+                    <stop offset="58%" stop-color="#1f252d" />
+                    <stop offset="100%" stop-color="#080c12" />
+                  </radialGradient>
+                  <radialGradient id="traceShadow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="rgba(0,0,0,0.34)" />
+                    <stop offset="100%" stop-color="rgba(0,0,0,0)" />
+                  </radialGradient>
+                </defs>
+
+                <g>
+                  <g class="car-body-core">
+                  <ellipse cx="430" cy="232" rx="314" ry="17" fill="url(#traceShadow)" />
+
+                  <path d="M56 196 C82 151, 145 121, 242 109 C324 78, 401 67, 486 66 C595 65, 681 83, 742 111 C774 124, 802 139, 822 156 L832 168 L832 206 C796 217, 725 222, 596 226 L208 226 C122 226, 74 214, 56 202 Z"
+                        fill="url(#traceBodyBlue)" stroke="#205e97" stroke-width="2.6" />
+
+                  <path d="M68 193 C99 149, 161 120, 250 109 C335 77, 412 66, 493 66 C564 66, 631 75, 690 93"
+                        fill="none" stroke="url(#traceBodyShade)" stroke-width="11" stroke-linecap="round" opacity="0.86" />
+
+                  <path d="M282 112 C321 86, 393 72, 489 69 C559 67, 622 75, 676 91 C646 99, 609 103, 564 106 C460 112, 365 113, 290 112 Z"
+                        fill="url(#traceDark)" />
+
+                  <path d="M304 114 C341 88, 403 78, 486 75 C549 74, 604 81, 655 95 C632 101, 599 105, 559 108 C464 113, 381 114, 313 114 Z"
+                        fill="url(#traceGlass)" />
+
+                  <path d="M208 198 C235 149, 288 118, 366 107 C458 95, 551 112, 627 148"
+                        fill="none" stroke="#69caff" stroke-width="8" stroke-linecap="round" opacity="0.94" />
+
+                  <!-- 车头大灯 -->
+                  <path d="M50 196 L97 193 L98 214 L51 215 Z" fill="#0f1b2b" />
+                  <circle cx="66" cy="204" r="12" fill="#ffc107" opacity="0.9" />
+                  <circle cx="66" cy="204" r="9" fill="#ffeb3b" opacity="0.85" />
+                  <circle cx="66" cy="204" r="5" fill="#fff9c4" />
+                  <circle cx="87" cy="204" r="12" fill="#ffc107" opacity="0.9" />
+                  <circle cx="87" cy="204" r="9" fill="#ffeb3b" opacity="0.85" />
+                  <circle cx="87" cy="204" r="5" fill="#fff9c4" />
+
+                  <!-- 车门缝隙 -->
+                  <line x1="520" y1="115" x2="520" y2="220" stroke="#0a1420" stroke-width="1.5" opacity="0.7" />
+                  
+                  <!-- 车尾排气管1（车身底部） -->
+                  <rect x="55" y="214" width="24" height="24" rx="4" fill="#1a1a1a" />
+                  <rect x="58" y="217" width="18" height="18" rx="3" fill="#0a0a0a" />
+                  <circle cx="65" cy="226" r="8" fill="#2a2a2a" />
+                  <circle cx="65" cy="226" r="4" fill="#1a1a1a" />
+                  
+                  <!-- 车尾排气管2（车身底部） -->
+                  <rect x="35" y="216" width="22" height="22" rx="4" fill="#1a1a1a" />
+                  <rect x="38" y="219" width="16" height="16" rx="3" fill="#0a0a0a" />
+                  <circle cx="46" cy="227" r="7" fill="#2a2a2a" />
+                  <circle cx="46" cy="227" r="3" fill="#1a1a1a" />
+
+                  <rect class="tail-light-glow" x="140" y="186" width="28" height="10" rx="5" fill="#ff5a66" opacity="0.35" />
+                  <rect class="tail-light" x="143" y="188" width="24" height="7" rx="3.5" fill="#ff2a3e" />
+
+                  <g fill="#0f1a28" opacity="0.9">
+                    <rect x="540" y="205" width="9" height="8" rx="2" />
+                    <rect x="553" y="204" width="9" height="9" rx="2" />
+                    <rect x="566" y="203" width="9" height="10" rx="2" />
+                    <rect x="579" y="202" width="9" height="11" rx="2" />
+                    <rect x="592" y="201" width="9" height="12" rx="2" />
+                  </g>
+
+                  <path d="M804 180 C814 178, 824 177, 835 176" stroke="#d6f1ff" stroke-width="3" stroke-linecap="round" opacity="0.9" />
+
+                  <circle cx="226" cy="202" r="60" fill="url(#traceTire)" />
+                  <circle cx="678" cy="202" r="62" fill="url(#traceTire)" />
+
+                  <g transform="translate(226 202)">
+                    <circle r="45" fill="#c6d1dc" />
+                    <circle r="36" fill="#899bb1" />
+                    <g stroke="#e9eff7" stroke-width="4.8" stroke-linecap="round">
+                      <line x1="0" y1="-29" x2="0" y2="29" />
+                      <line x1="-25" y1="-14" x2="25" y2="14" />
+                      <line x1="25" y1="-14" x2="-25" y2="14" />
+                      <line x1="-29" y1="0" x2="29" y2="0" />
+                      <line x1="-18" y1="-24" x2="18" y2="24" />
+                      <line x1="18" y1="-24" x2="-18" y2="24" />
+                    </g>
+                    <circle r="11" fill="#5d6f85" />
+                    <circle cx="-33" cy="0" r="4" fill="#d4ad4a" />
+                  </g>
+
+                  <g transform="translate(678 202)">
+                    <circle r="46" fill="#c8d2de" />
+                    <circle r="37" fill="#8b9db3" />
+                    <g stroke="#ebf1f8" stroke-width="4.9" stroke-linecap="round">
+                      <line x1="0" y1="-30" x2="0" y2="30" />
+                      <line x1="-27" y1="-15" x2="27" y2="15" />
+                      <line x1="27" y1="-15" x2="-27" y2="15" />
+                      <line x1="-30" y1="0" x2="30" y2="0" />
+                      <line x1="-19" y1="-25" x2="19" y2="25" />
+                      <line x1="19" y1="-25" x2="-19" y2="25" />
+                    </g>
+                    <circle r="11" fill="#5f7187" />
+                    <circle cx="-34" cy="0" r="4" fill="#d4ad4a" />
+                  </g>
+                  </g>
+
+                  <!-- 车尾尾翼（左侧后方，强化可见度） -->
+                  <path d="M96 70 L20 36 L20 152 L96 168 Z" fill="#16324a" stroke="#61b7ff" stroke-width="3" />
+                  <path d="M92 78 L26 46 L26 144 L92 160 Z" fill="#1f4b72" opacity="0.92" />
+                  <path d="M88 86 L32 56 L32 134 L88 150 Z" fill="#5fc5ff" opacity="0.55" />
+                  <ellipse cx="58" cy="102" rx="13" ry="35" fill="#90deff" opacity="0.38" />
+                  <rect x="82" y="84" width="18" height="74" rx="7" fill="#17364f" opacity="0.9" />
+                </g>
+              </svg>
+              <div id="roadCarBadge" class="road-car-badge">默认车型</div>
+            </div>
+            <div class="water-splash" id="waterSplash"></div>
+            <div class="road-obstacle" id="roadObstacle">路障</div>
+            <div class="road-fx" id="roadFx"></div>
+            <div class="crash-explosion" id="roadCrashExplosion" aria-hidden="true">
+              <span class="spark s1"></span>
+              <span class="spark s2"></span>
+              <span class="spark s3"></span>
+              <span class="spark s4"></span>
+              <span class="spark s5"></span>
+              <span class="spark s6"></span>
+              <span class="spark s7"></span>
+              <span class="spark s8"></span>
+            </div>
+          </div>
+
+          <div id="answerOverlay" class="answer-overlay hidden">
+            <div class="answer-card">
+              <h4>这道题答错了</h4>
+              <p>中文: <span id="overlayChinese">-</span></p>
+              <p>英文: <span id="overlayEnglish">-</span></p>
+              <button id="continueBtn" class="btn warn">继续 (空格)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="spellingPanel" class="spelling-panel hidden">
+          <div class="spelling-actions">
+            <button id="speakWordBtn" class="btn ghost">播放读音</button>
+          </div>
+          <div class="spelling-word" id="spellingWord">_ _ _</div>
+          <div id="keyboard" class="keyboard"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.core.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

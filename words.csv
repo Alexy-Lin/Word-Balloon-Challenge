@@ -1,0 +1,74 @@
+﻿中文,英文,unit,status,score
+测试,Test,TestUnit,4,80
+床,bed,U1L1,1,10
+书柜,bookcase,U1L1,1,10
+电脑,computer,U1L1,1,10
+椅子,chair,U1L1,1,10
+钟,clock,U1L1,1,10
+衣柜,closet,U1L1,1,10
+书桌,desk,U1L1,1,10
+台灯,lamp,U1L1,0,0
+沙发,sofa,U1L1,0,0
+淋浴,shower,U1L1,0,0
+水池,sink,U1L1,0,0
+火炉,stove,U1L1,0,0
+厨房,kitchen,U1L2,0,0
+客厅,living room,U1L2,0,0
+浴室,bathroom,U1L2,0,0
+卧室,bedroom,U1L2,0,0
+饭厅,dinning room,U1L2,0,0
+在…前面,in front of,U1L2,1,10
+在...下面,under,U1L2,0,0
+在…上面,on,U1L2,0,0
+在…后面,behind,U1L2,0,0
+苹果,apple,U2L1,0,0
+香蕉,banana,U2L1,1,10
+梨,pear,U2L1,0,0
+桃子,peach,U2L1,0,0
+西瓜,watermelon,U2L1,1,10
+橘子,orange,U2L1,0,0
+葡萄,grape,U2L1,1,10
+芒果,mango,U2L1,0,0
+番茄,tomato,U2L1,0,0
+草莓,strawberry,U2L1,0,0
+辣椒,pepper,U2L2,4,80
+洋葱,onion,U2L2,4,80
+豆子,bean,U2L2,4,80
+豌豆,pea,U2L2,4,80
+胡萝卜,carrot,U2L2,4,80
+生菜,lettuce,U2L2,4,80
+西兰花,broccoli,U2L2,4,80
+黄瓜,cucumber,U2L2,4,80
+玉米,corn,U2L2,4,80
+土豆,potato,U2L2,4,80
+游乐场,playground,一下unit4,4,80
+滑梯,slide,一下unit4,4,80
+秋千,swing,一下unit4,4,80
+跷跷板,seesaw,一下unit4,4,80
+紧紧抓住,hold on tight,一下unit4,4,80
+小心；注意,be careful,一下unit4,4,80
+天气,weather,一下unit5,0,0
+阳光充足的,sunny,一下unit5,0,0
+阴雨的,rainy,一下unit5,0,0
+风大的,windy,一下unit5,0,0
+多云的,cloudy,一下unit5,0,0
+下雪的,snowy,一下unit5,0,0
+大的,big,U2L3,0,0
+小的,small,U2L3,0,0
+健康的,fine,一下unit1,4,80
+忙碌的,busy,一下unit1,4,80
+疲倦的,tired,一下unit1,4,80
+高兴的,happy,一下unit1,4,80
+太好了,great,一下unit1,4,80
+午餐,lunch,一下unit2,4,80
+时间,time,一下unit2,4,80
+肉丸,meatball,一下unit2,4,80
+大米,rice,一下unit2,4,80
+蔬菜,vegetable,一下unit2,4,80
+汤,soup,一下unit2,4,80
+颜色,colour,一下unit3,0,0
+黄色的,yellow,一下unit3,0,0
+红色的,red,一下unit3,0,0
+蓝色的,blue,一下unit3,0,0
+绿色,green,一下unit3,0,0
+totla score,,,,2350

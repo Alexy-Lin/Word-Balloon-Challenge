@@ -1,0 +1,51 @@
+{
+  "cumulativeScore": 2450,
+  "silverCoins": 2450,
+  "goldCoins": 2240,
+  "goldEarnedWords": [
+    "测试",
+    "小心；注意",
+    "秋千",
+    "游乐场",
+    "跷跷板",
+    "滑梯",
+    "紧紧抓住",
+    "疲倦的",
+    "高兴的",
+    "忙碌的",
+    "健康的",
+    "太好了",
+    "午餐",
+    "时间",
+    "蔬菜",
+    "大米",
+    "汤",
+    "肉丸"
+  ],
+  "ownedVehicleIds": [
+    "default_bugatti",
+    "rusty_oldtimer",
+    "family_car"
+  ],
+  "equippedVehicleId": "family_car",
+  "ownedEffectIds": [
+    "effect_default"
+  ],
+  "equippedEffectId": "effect_default",
+  "reviewCounts": {
+    "TestUnit": 16
+  },
+  "units": [
+    "一下unit4",
+    "一下unit5",
+    "TestUnit",
+    "U1L1",
+    "U1L2",
+    "U2L1",
+    "U2L2",
+    "U2L3",
+    "一下unit1",
+    "一下unit2",
+    "一下unit3"
+  ]
+}

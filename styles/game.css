@@ -1,0 +1,1513 @@
+﻿.unit-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 19px;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(31, 42, 68, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.unit-btn:hover {
+  transform: translateY(-3px) rotate(-0.5deg);
+  box-shadow: 0 0 0 3px rgba(255, 193, 69, 0.45), 0 10px 22px rgba(31, 42, 68, 0.14);
+}
+
+.unit-btn small {
+  display: block;
+  opacity: 0.65;
+  font-size: 15px;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.stat-pill {
+  background: rgba(247, 252, 255, 0.88);
+  border: 1px solid rgba(180, 220, 255, 0.7);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-weight: 700;
+  font-size: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.sync-pill {
+  font-weight: 600;
+  font-size: 18px;
+  padding: 8px 14px;
+}
+
+.progress-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.progress-board.compact {
+  max-width: 760px;
+}
+
+.progress-pill {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(180, 215, 255, 0.7);
+  border-radius: 12px;
+  padding: 6px 11px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.prompt-wrap {
+  margin: 8px 0 8px;
+  text-align: center;
+}
+
+.prompt-label {
+  margin: 0;
+  opacity: 0.65;
+  font-size: 20px;
+}
+
+#promptText {
+  margin: 0;
+  font-size: clamp(36px, 4.2vw, 58px);
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 25%, #ffe066 50%, #ffb300 75%, #ffd700 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 3s ease-in-out infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 4px rgba(180,120,0,0.35)) drop-shadow(0 0 8px rgba(255,200,0,0.2));
+  white-space: nowrap;
+  font-weight: 900;
+}
+
+@keyframes goldShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+#balloonCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #c4ecff 0%, #e8f8ff 44%, #f2ffef 100%);
+  border: 1px solid #b9e4ff;
+  cursor: none;
+  z-index: 0;
+}
+
+.feedback {
+  margin: 0;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 1px 3px rgba(255,255,255,0.8);
+}
+
+.feedback.ok {
+  color: var(--ok);
+}
+
+.feedback.bad {
+  color: var(--bad);
+}
+
+.answer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 36, 62, 0.26);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  line-height: normal;
+}
+
+.answer-card {
+  width: min(620px, 92vw);
+  background: #fffef7;
+  border: 2px solid #ffd691;
+  border-radius: 16px;
+  box-shadow: 0 18px 36px rgba(14, 36, 59, 0.22);
+  padding: 26px 28px;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.answer-card h4 {
+  margin: 0 0 14px;
+  color: #b53f3f;
+  font-size: 38px;
+}
+
+.answer-card p {
+  margin: 8px 0;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.spelling-panel {
+  margin-top: 12px;
+}
+
+.spelling-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.road-scene {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(165, 206, 235, 0.9);
+  background: linear-gradient(180deg, #bfeaff 0%, #eefaff 60%, #85bc61 61%, #72ab50 100%);
+  z-index: 1;
+}
+
+.road-scene::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 92px;
+  background: linear-gradient(180deg, #8e6644 0%, #6e4d34 44%, #583d29 100%);
+  border-top: 2px solid rgba(255, 220, 170, 0.28);
+}
+
+.road-scene::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 92px;
+  height: 2px;
+  background: rgba(25, 35, 49, 0.4);
+}
+
+.scene-sky,
+.scene-hills,
+.scene-label,
+.road-lane,
+.road-gap,
+.road-water,
+.road-car,
+.road-obstacle,
+.road-fx {
+  position: absolute;
+}
+
+.scene-sky {
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,255,255,0.78) 0 26px, transparent 27px),
+    radial-gradient(circle at 74% 14%, rgba(255,255,255,0.7) 0 22px, transparent 23px),
+    linear-gradient(180deg, rgba(255,255,255,0.34) 0%, transparent 54%);
+}
+
+.scene-hills {
+  left: -5%;
+  right: -5%;
+  bottom: 186px;
+  height: 112px;
+  background:
+    radial-gradient(circle at 16% 100%, #6da54f 0, #6da54f 26%, transparent 27%),
+    radial-gradient(circle at 36% 100%, #7cb55b 0, #7cb55b 24%, transparent 25%),
+    radial-gradient(circle at 62% 100%, #689d4b 0, #689d4b 28%, transparent 29%),
+    radial-gradient(circle at 83% 100%, #79b35a 0, #79b35a 22%, transparent 23%);
+}
+
+.scene-label {
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  max-width: min(90%, 700px);
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  font-size: 17px;
+  font-weight: 800;
+  color: #204067;
+  box-shadow: 0 8px 20px rgba(19, 43, 79, 0.12);
+}
+
+.road-lane {
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #525c69 0%, #333a45 100%);
+}
+
+.lane-a {
+  height: 72px;
+  bottom: 92px;
+}
+
+.lane-b {
+  height: 18px;
+  bottom: 164px;
+  background: linear-gradient(180deg, #6a7480 0%, #555f6c 100%);
+  opacity: 0.96;
+}
+
+.road-lane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 42px, rgba(255,255,255,0.9) 42px 76px, transparent 76px 126px);
+  height: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lane-b::before {
+  height: 3px;
+  opacity: 0.55;
+}
+
+.road-gap,
+.road-water {
+  display: none;
+}
+
+.road-gap {
+  bottom: 0;
+  left: 50%;
+  margin-left: -88px;
+  width: 176px;
+  height: 164px;
+  background: linear-gradient(180deg, #121821 0%, #232b38 100%);
+  box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.38);
+}
+
+.road-gap::before,
+.road-gap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 100%;
+  background: linear-gradient(180deg, #5e4731 0%, #25190f 100%);
+  box-shadow: inset 0 8px 0 rgba(255,255,255,0.1);
+}
+
+.road-gap::before {
+  left: -6px;
+  clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
+}
+
+.road-gap::after {
+  right: -6px;
+  clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.road-water {
+  bottom: 0;
+  left: 50%;
+  margin-left: -88px;
+  width: 176px;
+  height: 164px;
+  background:
+    linear-gradient(180deg, rgba(30,120,200,0.15) 0%, rgba(30,100,180,0.6) 40%, #2080cc 60%, #1566a8 100%);
+  opacity: 0.95;
+  overflow: hidden;
+}
+
+/* 水面波纹 */
+.road-water::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.12) 0, rgba(255,255,255,0.12) 20px,
+    transparent 20px, transparent 40px
+  );
+  animation: waterRipple 1.5s ease-in-out infinite;
+}
+
+@keyframes waterRipple {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
+}
+
+/* ===== 布加迪威龙赛车 ===== */
+.road-car {
+  left: 5%;
+  bottom: 98px;
+  width: 192px;
+  height: 71px;
+  transition: transform 0.25s ease;
+  z-index: 3;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.32));
+}
+
+.road-car-badge {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  transform: translateX(-50%);
+  background: rgba(20, 28, 42, 0.78);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.road-car[data-vehicle="default"] {
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.32));
+}
+
+.road-car[data-vehicle="oldtimer"] {
+  filter: grayscale(0.72) sepia(0.55) saturate(0.68) brightness(0.82) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.36));
+}
+
+.road-car[data-vehicle="family"] {
+  filter: hue-rotate(-32deg) saturate(0.88) brightness(1.02) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.33));
+}
+
+.road-car[data-vehicle="taxi"] {
+  filter: hue-rotate(108deg) saturate(1.4) brightness(1.08) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.34));
+}
+
+.road-car[data-vehicle="sedan"] {
+  filter: hue-rotate(186deg) saturate(0.92) brightness(0.94) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+}
+
+.road-car[data-vehicle="police"] {
+  filter: hue-rotate(230deg) saturate(1.35) brightness(1.04) contrast(1.08) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.34));
+}
+
+.road-car[data-vehicle="fire"] {
+  filter: hue-rotate(300deg) saturate(1.44) brightness(0.97) contrast(1.1) drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+}
+
+.road-car[data-vehicle="supercar"] {
+  transform: scale(1.04);
+  filter: hue-rotate(58deg) saturate(1.55) brightness(1.12) contrast(1.08) drop-shadow(0 10px 14px rgba(0, 0, 0, 0.36));
+}
+
+.road-car[data-vehicle="tank"] {
+  transform: scale(1.08);
+  filter: grayscale(0.2) hue-rotate(8deg) saturate(0.62) brightness(0.74) contrast(1.18) drop-shadow(0 11px 14px rgba(0, 0, 0, 0.45));
+}
+
+.road-car[data-vehicle="gold"] {
+  transform: scale(1.06);
+  filter: sepia(0.96) hue-rotate(348deg) saturate(1.85) brightness(1.22) contrast(1.08) drop-shadow(0 0 16px rgba(255, 208, 89, 0.72));
+}
+
+.road-car.driving {
+  animation: carDrive 2s ease-in forwards;
+}
+
+@keyframes carDrive {
+  0% {
+    left: 5%;
+    opacity: 1;
+  }
+  100% {
+    left: 120%;
+    opacity: 0.8;
+  }
+}
+
+.bugatti-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: none;
+  transform-origin: center;
+}
+
+.bugatti-svg .car-body-core {
+  transform: translateX(-6px) scaleX(-1);
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.bugatti-svg .tail-light {
+  animation: tailLightBlink 0.72s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 67, 92, 0.9));
+}
+
+.bugatti-svg .tail-light-glow {
+  animation: tailLightGlow 0.72s ease-in-out infinite;
+}
+
+@keyframes tailLightBlink {
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 3px rgba(255, 67, 92, 0.55));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(255, 67, 92, 1));
+  }
+}
+
+@keyframes tailLightGlow {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.bug-wheel-rim {
+  transform-origin: center center;
+  transform-box: fill-box;
+}
+
+.car-speed-lines {
+  position: absolute;
+  left: -88px;
+  top: 34px;
+  width: 90px;
+  height: 28px;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0, transparent 4px,
+      rgba(95,200,255,0.2) 4px, rgba(95,200,255,0.2) 5px,
+      transparent 6px, transparent 11px
+    );
+  mask: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+  -webkit-mask: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+  animation: speedLinesFlow 0.2s linear infinite;
+}
+
+.road-car[data-effect="default"] .car-speed-lines {
+  opacity: 1;
+}
+
+.road-car[data-effect="neon"] .car-speed-lines {
+  filter: saturate(1.8) hue-rotate(54deg) brightness(1.3);
+  opacity: 0.96;
+}
+
+.road-car[data-effect="neon"]::after,
+.road-car[data-effect="flame"]::after,
+.road-car[data-effect="thunder"]::after {
+  content: "";
+  position: absolute;
+  right: 95%;
+  top: 42px;
+  width: 60px;
+  height: 14px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.road-car[data-effect="neon"]::after {
+  background: linear-gradient(90deg, rgba(92, 245, 255, 0.7), rgba(176, 104, 255, 0));
+  filter: blur(1.2px);
+  animation: neonTrailPulse 0.36s ease-in-out infinite alternate;
+}
+
+.road-car[data-effect="flame"]::after {
+  background: radial-gradient(circle at 20% 50%, rgba(255, 235, 160, 0.85) 0, rgba(255, 147, 48, 0.78) 45%, rgba(255, 70, 30, 0) 80%);
+  animation: flameTrailPulse 0.22s linear infinite alternate;
+}
+
+.road-car[data-effect="thunder"]::after {
+  background: linear-gradient(90deg, rgba(145, 210, 255, 0.85), rgba(130, 130, 255, 0));
+  filter: blur(0.8px);
+  animation: thunderTrailPulse 0.18s ease-in-out infinite;
+}
+
+.road-car[data-effect="thunder"] .bugatti-svg {
+  animation: thunderFlash 1.1s ease-in-out infinite;
+}
+
+@keyframes neonTrailPulse {
+  from { opacity: 0.52; transform: scaleX(0.8); }
+  to { opacity: 1; transform: scaleX(1.1); }
+}
+
+@keyframes flameTrailPulse {
+  from { opacity: 0.56; transform: scaleX(0.84); }
+  to { opacity: 1; transform: scaleX(1.15); }
+}
+
+@keyframes thunderTrailPulse {
+  0%, 100% { opacity: 0.5; }
+  48% { opacity: 1; }
+}
+
+@keyframes thunderFlash {
+  0%, 100% { filter: brightness(1); }
+  48% { filter: brightness(1.28) drop-shadow(0 0 12px rgba(176, 218, 255, 0.7)); }
+}
+
+@keyframes speedLinesFlow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-10px); }
+}
+
+/* 水花特效 */
+.water-splash {
+  display: none;
+  position: absolute;
+  z-index: 4;
+}
+
+.road-scene.failure.challenge-water .water-splash {
+  display: block;
+  left: 50%;
+  margin-left: -60px;
+  bottom: 142px;
+  width: 120px;
+  height: 80px;
+  animation: splashBurst 0.8s ease-out 0.7s both;
+}
+
+.road-scene.failure.challenge-water .water-splash::before,
+.road-scene.failure.challenge-water .water-splash::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.road-scene.failure.challenge-water .water-splash::before {
+  left: 10px;
+  bottom: 0;
+  width: 100px;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(60,160,255,0.7) 0%, rgba(60,160,255,0) 70%);
+  animation: splashRingGrow 0.9s ease-out 0.7s both;
+}
+
+.road-scene.failure.challenge-water .water-splash::after {
+  left: 20px;
+  bottom: 10px;
+  width: 80px;
+  height: 60px;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(100,200,255,0.8) 0 6px, transparent 7px),
+    radial-gradient(circle at 50% 30%, rgba(100,200,255,0.7) 0 5px, transparent 6px),
+    radial-gradient(circle at 80% 70%, rgba(100,200,255,0.8) 0 4px, transparent 5px),
+    radial-gradient(circle at 35% 50%, rgba(150,220,255,0.6) 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 40%, rgba(130,210,255,0.7) 0 5px, transparent 6px);
+  animation: splashDroplets 1s ease-out 0.75s both;
+}
+
+@keyframes splashBurst {
+  0% { transform: scale(0.3); opacity: 0; }
+  30% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes splashRingGrow {
+  0% { transform: scale(0.4); opacity: 0; }
+  40% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.8) translateY(-10px); opacity: 0; }
+}
+
+@keyframes splashDroplets {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  25% { transform: translateY(-30px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(20px) scale(0.6); opacity: 0; }
+}
+
+.road-obstacle {
+  left: 50%;
+  margin-left: -130px;
+  bottom: 102px;
+  width: 260px;
+  min-width: 88px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #163455;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  box-shadow: 0 12px 22px rgba(19, 32, 54, 0.15);
+}
+
+.road-fx {
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+  font-size: 44px;
+  font-weight: 900;
+  color: #fff6cc;
+  text-shadow: 0 0 10px rgba(23, 38, 64, 0.32);
+  z-index: 5;
+  letter-spacing: 0.06em;
+}
+
+.crash-explosion {
+  position: absolute;
+  left: 50%;
+  bottom: 124px;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 7;
+}
+
+.crash-explosion::before,
+.crash-explosion::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+}
+
+.crash-explosion::before {
+  width: 34px;
+  height: 34px;
+  background: radial-gradient(circle, rgba(255,250,220,0.95) 0%, rgba(255,175,60,0.86) 46%, rgba(255,95,20,0) 74%);
+}
+
+.crash-explosion::after {
+  width: 92px;
+  height: 92px;
+  border: 4px solid rgba(255, 196, 86, 0.9);
+  box-shadow: 0 0 18px rgba(255, 115, 46, 0.55);
+}
+
+.crash-explosion .spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ffe58b 0%, #ff8a2a 100%);
+  box-shadow: 0 0 10px rgba(255, 155, 46, 0.7);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.crash-explosion.active {
+  opacity: 1;
+}
+
+.crash-explosion.active::before {
+  animation: crashFlashCore 0.5s ease-out forwards;
+}
+
+.crash-explosion.active::after {
+  animation: crashShockRing 0.66s ease-out forwards;
+}
+
+.crash-explosion.active .spark {
+  animation: crashDebris 0.75s cubic-bezier(0.18, 0.72, 0.24, 1) forwards;
+}
+
+.crash-explosion.active .spark.s1 { --dx: -88px; --dy: -26px; --rot: -36deg; }
+.crash-explosion.active .spark.s2 { --dx: -60px; --dy: -70px; --rot: -72deg; }
+.crash-explosion.active .spark.s3 { --dx: -22px; --dy: -84px; --rot: -18deg; }
+.crash-explosion.active .spark.s4 { --dx: 26px; --dy: -76px; --rot: 24deg; }
+.crash-explosion.active .spark.s5 { --dx: 72px; --dy: -46px; --rot: 70deg; }
+.crash-explosion.active .spark.s6 { --dx: 86px; --dy: -8px; --rot: 106deg; }
+.crash-explosion.active .spark.s7 { --dx: 48px; --dy: 20px; --rot: 145deg; }
+.crash-explosion.active .spark.s8 { --dx: -44px; --dy: 14px; --rot: -148deg; }
+
+.crash-explosion.heavy .spark {
+  width: 12px;
+  height: 8px;
+}
+
+.crash-explosion.heavy::after {
+  border-width: 5px;
+}
+
+@keyframes crashFlashCore {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+  20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.95); opacity: 0; }
+}
+
+@keyframes crashShockRing {
+  0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+  25% { opacity: 0.95; }
+  100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+}
+
+@keyframes crashDebris {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.35); opacity: 0; }
+  16% { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(1); opacity: 0; }
+}
+
+/* ===== 路障 – 红白横杆式路障 ===== */
+.road-scene.challenge-barrier .road-obstacle {
+  width: 220px;
+  min-height: 78px;
+  margin-left: -110px;
+  bottom: 96px;
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ff2a2a 0 26px,
+      #ffffff 26px 38px,
+      #ff2a2a 38px 64px
+    );
+  border: 3px solid #cf1010;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  font-size: 20px;
+}
+
+/* 路障立柱 */
+.road-scene.challenge-barrier .road-obstacle::before {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  left: 28px;
+  width: 16px;
+  height: 22px;
+  background: linear-gradient(180deg, #8a8f98 0%, #575d67 100%);
+  border-radius: 2px;
+  box-shadow: 148px 0 0 #5a606a;
+}
+
+.road-scene.challenge-barrier .road-obstacle::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 14px;
+  height: 4px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 999px;
+}
+
+.road-scene.challenge-cliff .road-gap {
+  display: block;
+  background: linear-gradient(180deg, #0d1118 0%, #1a212d 100%);
+}
+
+.road-scene.challenge-cliff .road-obstacle {
+  display: none;
+}
+
+/* ===== 巨石 – 更大更高的真实巨石 ===== */
+.road-scene.challenge-rock .road-obstacle {
+  width: 190px;
+  min-height: 92px;
+  margin-left: -95px;
+  bottom: 94px;
+  background:
+    radial-gradient(ellipse at 28% 22%, rgba(220,220,230,0.48) 0%, transparent 42%),
+    radial-gradient(ellipse at 74% 66%, rgba(74,78,92,0.42) 0%, transparent 36%),
+    linear-gradient(120deg, #9ea5b2 0%, #7f8899 36%, #616b7d 72%, #4b5465 100%);
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  border-radius: 52% 48% 42% 58% / 44% 34% 66% 56%;
+  border: none;
+  box-shadow:
+    inset -10px -7px 18px rgba(0,0,0,0.32),
+    inset 8px 10px 13px rgba(204,212,230,0.24),
+    4px 8px 20px rgba(0,0,0,0.35);
+  font-size: 22px;
+}
+
+/* 巨石裂缝 */
+.road-scene.challenge-rock .road-obstacle::before {
+  content: "";
+  position: absolute;
+  top: 28%;
+  left: 18%;
+  width: 62%;
+  height: 2px;
+  background: rgba(40,40,50,0.4);
+  transform: rotate(-10deg);
+  border-radius: 1px;
+}
+
+.road-scene.challenge-rock .road-obstacle::after {
+  content: "";
+  position: absolute;
+  top: 58%;
+  left: 42%;
+  width: 30%;
+  height: 2px;
+  background: rgba(40,40,50,0.3);
+  transform: rotate(16deg);
+  border-radius: 1px;
+}
+
+.road-scene.challenge-water .road-water {
+  display: block;
+}
+
+.road-scene.challenge-water .road-obstacle {
+  left: 50%;
+  margin-left: -120px;
+  width: 240px;
+  bottom: 172px;
+  background: linear-gradient(180deg, #45b8ff 0%, #1f8bd7 100%);
+  color: #ffffff;
+}
+
+.road-scene.challenge-bridge .road-gap {
+  display: block;
+  width: 196px;
+  left: 50%;
+  margin-left: -98px;
+  background: linear-gradient(180deg, #18202b 0%, #263141 100%);
+}
+
+.road-scene.challenge-bridge .road-gap::before,
+.road-scene.challenge-bridge .road-gap::after {
+  background: linear-gradient(180deg, #8d6a49 0%, #5d412b 100%);
+}
+
+.road-scene.challenge-bridge .road-gap {
+  box-shadow: inset 0 14px 0 rgba(255,255,255,0.12), inset 0 -20px 20px rgba(0,0,0,0.35);
+}
+
+.road-scene.challenge-bridge .road-obstacle {
+  left: 50%;
+  margin-left: -140px;
+  width: 280px;
+  bottom: 168px;
+  background: linear-gradient(180deg, #caa88a 0%, #8b6545 100%);
+  color: #fff5e5;
+}
+
+/* ===== 锥桶阵 – 三角锥形 ===== */
+.road-scene.challenge-cones .road-obstacle {
+  width: 234px;
+  min-height: 68px;
+  margin-left: -117px;
+  bottom: 96px;
+  background:
+    linear-gradient(180deg, transparent 0 30px, #2f3743 30px 35px, transparent 35px 100%),
+    repeating-linear-gradient(
+      90deg,
+      #ff7a20 0 32px,
+      #ffb366 32px 40px,
+      #ff7a20 40px 70px,
+      transparent 70px 78px
+    );
+  border: 1px solid rgba(175, 91, 18, 0.45);
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  font-size: 18px;
+  gap: 0;
+  overflow: visible;
+}
+
+/* 侧视锥桶顶部高光和底部阴影 */
+.road-scene.challenge-cones .road-obstacle::before,
+.road-scene.challenge-cones .road-obstacle::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  border-radius: 999px;
+}
+
+.road-scene.challenge-cones .road-obstacle::before {
+  top: 10px;
+  height: 6px;
+  background: rgba(255,255,255,0.38);
+}
+
+.road-scene.challenge-cones .road-obstacle::after {
+  bottom: 6px;
+  height: 8px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* 锥桶白色条纹 – 通过 box-shadow 模拟 */
+
+.road-scene.success.challenge-barrier .road-car,
+.road-scene.success.challenge-rock .road-car,
+.road-scene.success.challenge-cones .road-car {
+  animation: driveSmashLeave 1.65s cubic-bezier(0.2, 0.72, 0.22, 1) forwards;
+}
+
+.road-scene.success.challenge-barrier .road-obstacle,
+.road-scene.success.challenge-rock .road-obstacle,
+.road-scene.success.challenge-cones .road-obstacle {
+  animation: obstacleShatter 1s ease forwards;
+}
+
+.road-scene.success.challenge-cliff .road-car {
+  animation: carLeapCliffLeave 2.45s cubic-bezier(0.22, 0.7, 0.16, 1) forwards;
+}
+
+.road-scene.success.challenge-water .road-car {
+  animation: carLeapWaterLeave 2.35s cubic-bezier(0.22, 0.7, 0.16, 1) forwards;
+}
+
+.road-scene.success.challenge-bridge .road-car {
+  animation: carLeapBridgeLeave 2.2s cubic-bezier(0.22, 0.7, 0.16, 1) forwards;
+}
+
+.road-scene.success .road-fx {
+  animation: fxFlash 0.9s ease forwards;
+}
+
+.road-scene.success.challenge-cliff .road-fx,
+.road-scene.success.challenge-bridge .road-fx {
+  animation: fxLeap 1.45s ease forwards;
+}
+
+.road-scene.failure.challenge-barrier .road-car,
+.road-scene.failure.challenge-rock .road-car,
+.road-scene.failure.challenge-cones .road-car {
+  animation: carCrashCenter 1.25s cubic-bezier(0.23, 0.7, 0.3, 1) forwards;
+}
+
+.road-scene.failure.challenge-water .road-car {
+  animation: carFallWaterCenter 1.35s cubic-bezier(0.24, 0.76, 0.37, 1) forwards;
+}
+
+.road-scene.failure.challenge-cliff .road-car,
+.road-scene.failure.challenge-bridge .road-car {
+  animation: carDropCliffCenter 1.35s cubic-bezier(0.24, 0.76, 0.37, 1) forwards;
+}
+
+.road-scene.failure.challenge-cliff .road-fx,
+.road-scene.failure.challenge-water .road-fx,
+.road-scene.failure.challenge-bridge .road-fx,
+.road-scene.failure.challenge-barrier .road-fx,
+.road-scene.failure.challenge-rock .road-fx,
+.road-scene.failure.challenge-cones .road-fx {
+  animation: fxFlash 0.9s ease forwards;
+}
+
+@keyframes driveSmashLeave {
+  0% { transform: translateX(0) rotate(0deg); }
+  48% { transform: translateX(418px) rotate(0deg); }
+  58% { transform: translateX(472px) rotate(-2deg); }
+  100% { transform: translateX(980px) rotate(0deg); }
+}
+
+@keyframes obstacleShatter {
+  0% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
+  35% { transform: translateX(34px) translateY(-6px) rotate(8deg) scale(1.05); opacity: 1; }
+  100% { transform: translateX(210px) translateY(-16px) rotate(11deg) scale(0.62); opacity: 0; }
+}
+
+@keyframes carJump {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); }
+  45% { transform: translateX(190px) translateY(-86px) rotate(-9deg); }
+  100% { transform: translateX(390px) translateY(-8px) rotate(0deg); }
+}
+
+@keyframes carLeapCliffLeave {
+  0% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+  40% { transform: translateX(272px) translateY(0) rotate(0deg) scale(1); }
+  56% { transform: translateX(390px) translateY(-126px) rotate(-10deg) scale(1.03); }
+  72% { transform: translateX(518px) translateY(-74px) rotate(4deg) scale(1); }
+  80% { transform: translateX(676px) translateY(0) rotate(0deg) scale(1); }
+  90% { transform: translateX(808px) translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateX(980px) translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes carLeapBridgeLeave {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); }
+  42% { transform: translateX(284px) translateY(0) rotate(0deg); }
+  58% { transform: translateX(404px) translateY(-120px) rotate(-9deg); }
+  74% { transform: translateX(532px) translateY(-72px) rotate(5deg); }
+  82% { transform: translateX(692px) translateY(0) rotate(0deg); }
+  92% { transform: translateX(826px) translateY(0) rotate(0deg); }
+  100% { transform: translateX(960px) translateY(0) rotate(0deg); }
+}
+
+@keyframes carLeapWaterLeave {
+  0% { transform: translateX(0) translateY(0) rotate(0deg) scale(1); }
+  41% { transform: translateX(276px) translateY(0) rotate(0deg) scale(1); }
+  57% { transform: translateX(394px) translateY(-122px) rotate(-9deg) scale(1.02); }
+  73% { transform: translateX(522px) translateY(-72px) rotate(3deg) scale(1); }
+  82% { transform: translateX(684px) translateY(0) rotate(0deg) scale(1); }
+  92% { transform: translateX(824px) translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateX(970px) translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes carCrashCenter {
+  0% { transform: translateX(0) rotate(0deg) scale(1); }
+  64% { transform: translateX(432px) rotate(0deg) scale(1); }
+  100% { transform: translateX(438px) rotate(-18deg) scale(0.9); }
+}
+
+@keyframes carFallWaterCenter {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+  62% { transform: translateX(430px) translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateX(492px) translateY(236px) rotate(42deg); opacity: 0; }
+}
+
+@keyframes carDropCliffCenter {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+  62% { transform: translateX(432px) translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateX(500px) translateY(236px) rotate(44deg); opacity: 0; }
+}
+
+@keyframes fxFlash {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  25% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+}
+
+@keyframes fxLeap {
+  0% { transform: translate(-50%, -50%) scale(0.35); opacity: 0; }
+  24% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  60% { transform: translate(-50%, -68%) scale(1.18); opacity: 0.95; }
+  100% { transform: translate(-50%, -88%) scale(1.38); opacity: 0; }
+}
+
+.spelling-word {
+  text-align: center;
+  letter-spacing: 0.3em;
+  font-size: 60px;
+  margin-bottom: 12px;
+  color: #0d5f7a;
+  font-weight: 800;
+}
+
+.spelling-word .spelling-space-char {
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+}
+
+.market-preview-car[data-vehicle="oldtimer"] .preview-body {
+  background: #8a6c55;
+}
+
+.market-preview-car[data-vehicle="family"] .preview-body {
+  background: #5a89ad;
+}
+
+.market-preview-car[data-vehicle="taxi"] .preview-body {
+  background: #efc22d;
+}
+
+.market-preview-car[data-vehicle="sedan"] .preview-body {
+  background: #2f4559;
+}
+
+.market-preview-car[data-vehicle="police"] .preview-body {
+  background: linear-gradient(90deg, #2b4661 0 55%, #ffffff 55% 100%);
+}
+
+.market-preview-car[data-vehicle="fire"] .preview-body {
+  background: #c43a26;
+}
+
+.market-preview-car[data-vehicle="supercar"] .preview-body {
+  background: #00b3ff;
+}
+
+.market-preview-car[data-vehicle="tank"] .preview-body {
+  background: #526145;
+  border-radius: 6px;
+}
+
+.market-preview-car[data-vehicle="gold"] .preview-body {
+  background: linear-gradient(90deg, #b58306 0%, #f4d35b 45%, #ffef9b 60%, #b58205 100%);
+}
+
+.market-preview-car[data-effect="default"] .preview-trail {
+  opacity: 0.35;
+}
+
+.market-preview-car[data-effect="neon"] .preview-trail {
+  width: 50px;
+  background: linear-gradient(90deg, rgba(85, 250, 255, 0.9), rgba(176, 104, 255, 0));
+  box-shadow: 0 0 8px rgba(128, 210, 255, 0.8);
+}
+
+.market-preview-car[data-effect="flame"] .preview-trail {
+  width: 52px;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 230, 150, 0.95) 0, rgba(255, 136, 0, 0.86) 45%, rgba(255, 60, 30, 0) 82%);
+}
+
+.market-preview-car[data-effect="thunder"] .preview-trail {
+  width: 50px;
+  background: linear-gradient(90deg, rgba(172, 228, 255, 0.95), rgba(114, 140, 255, 0));
+  box-shadow: 0 0 10px rgba(166, 212, 255, 0.75);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.key-spacer {
+  width: 72px;
+}
+
+/* ===== 宝石键盘 ===== */
+.key {
+  border: none;
+  clip-path: polygon(15% 0%, 85% 0%, 100% 18%, 100% 82%, 85% 100%, 15% 100%, 0% 82%, 0% 18%);
+  min-width: 72px;
+  min-height: 72px;
+  padding: 14px 10px;
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  transition: transform 0.14s ease, filter 0.14s ease;
+  position: relative;
+}
+
+/* 10 宝石颜色循环 – 按每行左到右 nth-child */
+.keyboard-row:nth-child(1) .key:nth-child(10n+1)  { background: linear-gradient(145deg, #ff6b8a 0%, #c82647 100%); }  /* 红宝石 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+2)  { background: linear-gradient(145deg, #ff9f5a 0%, #d8650d 100%); }  /* 橙玉 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+3)  { background: linear-gradient(145deg, #ffe459 0%, #c99b00 100%); color: #5a3e00; text-shadow: none; }  /* 黄玉 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+4)  { background: linear-gradient(145deg, #6fe87a 0%, #1e8c2e 100%); }  /* 翡翠 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+5)  { background: linear-gradient(145deg, #57d4ff 0%, #0a7ec4 100%); }  /* 蓝宝石 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+6)  { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }  /* 紫水晶 */
+.keyboard-row:nth-child(1) .key:nth-child(10n+7)  { background: linear-gradient(145deg, #ff6b8a 0%, #c82647 100%); }
+.keyboard-row:nth-child(1) .key:nth-child(10n+8)  { background: linear-gradient(145deg, #57d4ff 0%, #0a7ec4 100%); }
+.keyboard-row:nth-child(1) .key:nth-child(10n+9)  { background: linear-gradient(145deg, #6fe87a 0%, #1e8c2e 100%); }
+.keyboard-row:nth-child(1) .key:nth-child(10n+10) { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }
+
+.keyboard-row:nth-child(2) .key:nth-child(9n+1)  { background: linear-gradient(145deg, #57d4ff 0%, #0a7ec4 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+2)  { background: linear-gradient(145deg, #6fe87a 0%, #1e8c2e 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+3)  { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+4)  { background: linear-gradient(145deg, #ff6b8a 0%, #c82647 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+5)  { background: linear-gradient(145deg, #ffe459 0%, #c99b00 100%); color: #5a3e00; text-shadow: none; }
+.keyboard-row:nth-child(2) .key:nth-child(9n+6)  { background: linear-gradient(145deg, #ff9f5a 0%, #d8650d 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+7)  { background: linear-gradient(145deg, #57d4ff 0%, #0a7ec4 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+8)  { background: linear-gradient(145deg, #6fe87a 0%, #1e8c2e 100%); }
+.keyboard-row:nth-child(2) .key:nth-child(9n+9)  { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }
+
+.keyboard-row:nth-child(3) .key:nth-child(7n+1)  { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }
+.keyboard-row:nth-child(3) .key:nth-child(7n+2)  { background: linear-gradient(145deg, #ff6b8a 0%, #c82647 100%); }
+.keyboard-row:nth-child(3) .key:nth-child(7n+3)  { background: linear-gradient(145deg, #57d4ff 0%, #0a7ec4 100%); }
+.keyboard-row:nth-child(3) .key:nth-child(7n+4)  { background: linear-gradient(145deg, #6fe87a 0%, #1e8c2e 100%); }
+.keyboard-row:nth-child(3) .key:nth-child(7n+5)  { background: linear-gradient(145deg, #ffe459 0%, #c99b00 100%); color: #5a3e00; text-shadow: none; }
+.keyboard-row:nth-child(3) .key:nth-child(7n+6)  { background: linear-gradient(145deg, #ff9f5a 0%, #d8650d 100%); }
+.keyboard-row:nth-child(3) .key:nth-child(7n+7)  { background: linear-gradient(145deg, #b56cff 0%, #6a0fd4 100%); }
+
+/* 内高光增加宝石折射感 */
+.key::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.04) 54%, transparent 55%);
+  clip-path: inherit;
+  pointer-events: none;
+}
+
+.key:hover {
+  transform: translateY(-3px) scale(1.08);
+  filter: brightness(1.18) drop-shadow(0 6px 12px rgba(0,0,0,0.28));
+}
+
+.key.active {
+  transform: translateY(1px) scale(0.95);
+  filter: brightness(0.85);
+}
+
+.key.hint-next {
+  filter: brightness(1.5) drop-shadow(0 0 14px rgba(255,255,255,0.9)) drop-shadow(0 0 24px rgba(101, 180, 240, 0.95));
+  animation: hintKeyPulse 0.6s ease-in-out infinite alternate;
+  transform: scale(1.12);
+  z-index: 10;
+}
+
+@keyframes hintKeyPulse {
+  0% { filter: brightness(1.4) drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 16px rgba(101,180,240,0.8)); transform: scale(1.08); }
+  100% { filter: brightness(1.65) drop-shadow(0 0 20px rgba(255,255,255,1)) drop-shadow(0 0 34px rgba(140,210,255,1)); transform: scale(1.16); }
+}
+
+/* 提示模式：键盘外框钻石高亮发光 */
+.keyboard.hint-active {
+  position: relative;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(101,180,240,0.06);
+  box-shadow:
+    0 0 12px 4px rgba(101,180,240,0.3),
+    0 0 28px 8px rgba(140,210,255,0.15),
+    inset 0 0 12px 2px rgba(101,180,240,0.1);
+  animation: keyboardDiamondGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes keyboardDiamondGlow {
+  0% {
+    box-shadow:
+      0 0 10px 3px rgba(101,180,240,0.25),
+      0 0 24px 6px rgba(140,210,255,0.12),
+      inset 0 0 10px 2px rgba(101,180,240,0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 16px 6px rgba(180,220,255,0.4),
+      0 0 36px 12px rgba(101,180,240,0.2),
+      inset 0 0 16px 4px rgba(140,210,255,0.15);
+  }
+  100% {
+    box-shadow:
+      0 0 20px 8px rgba(200,230,255,0.45),
+      0 0 44px 16px rgba(101,180,240,0.25),
+      inset 0 0 20px 6px rgba(140,210,255,0.2);
+  }
+}
+
+/* 钻石角标闪光点 */
+.keyboard.hint-active::before,
+.keyboard.hint-active::after {
+  content: "💎";
+  position: absolute;
+  font-size: 20px;
+  z-index: 10;
+  animation: diamondSparkle 1.2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 6px rgba(101,180,240,0.8));
+}
+
+.keyboard.hint-active::before {
+  top: -6px;
+  left: -6px;
+}
+
+.keyboard.hint-active::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+@keyframes diamondSparkle {
+  0% { transform: scale(0.8) rotate(-10deg); opacity: 0.6; }
+  100% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+}
+
+.btn:hover,
+.btn:focus-visible,
+.unit-btn:focus-visible,
+.key:focus-visible {
+  outline: none;
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(255, 220, 80, 0.7));
+}
+
+/* 空格键 – 黄色钻石横条 */
+.key.space {
+  min-width: 380px;
+  font-size: 28px;
+  clip-path: polygon(6% 0%, 94% 0%, 100% 50%, 94% 100%, 6% 100%, 0% 50%);
+  background: linear-gradient(135deg, #ffe87a 0%, #ffc107 45%, #e8960a 100%);
+  color: #5a3700;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+  box-shadow: none;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.btn.ghost {
+  background: linear-gradient(145deg, #c77dff 0%, #9b59b6 40%, #7b2d8e 100%);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow:
+    0 4px 14px rgba(120,40,180,0.3),
+    inset 0 1px 3px rgba(255,255,255,0.25);
+  clip-path: polygon(15% 0%, 85% 0%, 100% 18%, 100% 82%, 85% 100%, 15% 100%, 0% 82%, 0% 18%);
+  padding: 10px 22px;
+  font-weight: 800;
+  position: relative;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn.ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.06) 50%, transparent 51%);
+  clip-path: inherit;
+  pointer-events: none;
+}
+
+.btn.ghost:hover {
+  transform: translateY(-2px) scale(1.05);
+  filter: brightness(1.2) drop-shadow(0 0 10px rgba(155,89,182,0.5));
+}
+
+.btn.ghost.is-speaking {
+  transform: translateY(1px) scale(0.97);
+  filter: brightness(0.85);
+  box-shadow:
+    0 2px 8px rgba(120,40,180,0.25),
+    inset 0 2px 5px rgba(0,0,0,0.22);
+}
+
+.btn.warn {
+  background: var(--accent-2);
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+#syncState.ok {
+  color: var(--ok);
+}
+
+#syncState.bad {
+  color: var(--bad);
+}
+
+@keyframes floatA {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+}
+
+@keyframes floatB {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 780px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-board {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .key {
+    min-width: 58px;
+    min-height: 58px;
+    font-size: 23px;
+  }
+
+  .key-spacer {
+    width: 58px;
+  }
+
+  .key.space {
+    min-width: 270px;
+  }
+
+  .manage-word-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scene-label {
+    min-width: 0;
+    font-size: 15px;
+  }
+
+  .road-car {
+    left: 4%;
+    width: 128px;
+    height: 48px;
+    bottom: 102px;
+  }
+
+  .road-obstacle {
+    right: 7%;
+    font-size: 16px;
+  }
+
+  .road-gap,
+  .road-water {
+    left: 50%;
+    width: 124px;
+    margin-left: -62px;
+    height: 156px;
+  }
+}
+
+@media (pointer: coarse) {
+  .btn {
+    font-size: 20px;
+    padding: 12px 16px;
+  }
+
+  .unit-btn {
+    font-size: 22px;
+    padding: 16px;
+  }
+
+  .stat-pill,
+  .progress-pill {
+    font-size: 20px;
+  }
+
+  .key {
+    min-width: 76px;
+    min-height: 76px;
+    font-size: 28px;
+  }
+
+  .key-spacer {
+    width: 76px;
+  }
+
+  .key.space {
+    min-width: 380px;
+  }
+}

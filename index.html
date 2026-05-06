@@ -7,23 +7,52 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- 全局渐变定义（始终渲染，供所有 Bugatti SVG 引用） -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <linearGradient id="traceBodyBlue" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#71d7ff" /><stop offset="34%" stop-color="#36b5f3" />
+          <stop offset="67%" stop-color="#208fe0" /><stop offset="100%" stop-color="#1a77cc" />
+        </linearGradient>
+        <linearGradient id="traceBodyShade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.5)" /><stop offset="100%" stop-color="rgba(255,255,255,0)" />
+        </linearGradient>
+        <linearGradient id="traceGlass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#dbf3ff" stop-opacity="0.95" /><stop offset="45%" stop-color="#8cbfe1" stop-opacity="0.85" /><stop offset="100%" stop-color="#2b4665" stop-opacity="0.94" />
+        </linearGradient>
+        <linearGradient id="traceDark" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a293b" /><stop offset="100%" stop-color="#0c1520" />
+        </linearGradient>
+        <radialGradient id="traceTire" cx="50%" cy="50%" r="50%">
+          <stop offset="58%" stop-color="#1f252d" /><stop offset="100%" stop-color="#080c12" />
+        </radialGradient>
+        <radialGradient id="traceShadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(0,0,0,0.34)" /><stop offset="100%" stop-color="rgba(0,0,0,0)" />
+        </radialGradient>
+      </defs>
+    </svg>
     <div class="bg-shape bg-shape-a"></div>
     <div class="bg-shape bg-shape-b"></div>
+    <div class="bg-shape bg-shape-c"></div>
 
     <main class="app-shell">
-      <header class="topbar">
-        <div>
+      <header class="topbar card">
+        <div class="topbar-brand">
           <h1>单词气球挑战</h1>
           <p class="subtitle">快乐背单词，打气球，拿星星</p>
         </div>
-        <div class="top-actions">
-          <button id="backBtn" class="btn warn">返回选单</button>
+        <div class="topbar-actions">
           <span class="stat-pill sync-pill">同步: <span id="syncState">未同步</span></span>
-          <button id="soundBtn" class="btn ghost">音效: 开</button>
-          <button id="speechBtn" class="btn ghost">读音: 开</button>
-          <button id="importBtn" class="btn ghost">导入 CSV</button>
-          <button id="exportBtn" class="btn ghost">导出 CSV</button>
-          <input id="fileInput" type="file" accept=".csv" hidden />
+          <div class="topbar-group">
+            <button id="soundBtn" class="btn ghost sm">音效: 开</button>
+            <button id="speechBtn" class="btn ghost sm">读音: 开</button>
+          </div>
+          <div class="topbar-group">
+            <button id="importBtn" class="btn ghost sm">导入 CSV</button>
+            <button id="exportBtn" class="btn ghost sm">导出 CSV</button>
+            <input id="fileInput" type="file" accept=".csv" hidden />
+          </div>
+          <button id="backBtn" class="btn warn">返回选单</button>
         </div>
       </header>
 
@@ -33,6 +62,52 @@
           <div class="manage-actions">
             <button id="openMarketBtn" class="btn ghost">市场</button>
             <button id="openAdminBtn" class="btn ghost">单元管理</button>
+          </div>
+        </div>
+        <div class="home-stats">
+          <div class="home-stats-row">
+            <div class="home-stat-coin">
+              <span class="home-stat-icon">🪙</span>
+              <span class="home-stat-label">银币</span>
+              <span class="home-stat-value" id="homeSilverCoins">0</span>
+            </div>
+            <div class="home-stat-coin gold">
+              <span class="home-stat-icon">👑</span>
+              <span class="home-stat-label">金币</span>
+              <span class="home-stat-value" id="homeGoldCoins">0</span>
+            </div>
+            <div class="home-stat-coin">
+              <span class="home-stat-icon">📚</span>
+              <span class="home-stat-label">总单词</span>
+              <span class="home-stat-value" id="homeTotalWords">0</span>
+            </div>
+          </div>
+          <div class="home-stages">
+            <div class="home-stage" data-stage="0">
+              <span class="stage-dot s0"></span>
+              <span class="stage-name">英文气球</span>
+              <span class="stage-num" id="homeStage0">0</span>
+            </div>
+            <div class="home-stage" data-stage="1">
+              <span class="stage-dot s1"></span>
+              <span class="stage-name">中文气球</span>
+              <span class="stage-num" id="homeStage1">0</span>
+            </div>
+            <div class="home-stage" data-stage="2">
+              <span class="stage-dot s2"></span>
+              <span class="stage-name">简单拼写</span>
+              <span class="stage-num" id="homeStage2">0</span>
+            </div>
+            <div class="home-stage" data-stage="3">
+              <span class="stage-dot s3"></span>
+              <span class="stage-name">普通拼写</span>
+              <span class="stage-num" id="homeStage3">0</span>
+            </div>
+            <div class="home-stage" data-stage="4">
+              <span class="stage-dot s4"></span>
+              <span class="stage-name">已完成</span>
+              <span class="stage-num" id="homeStage4">0</span>
+            </div>
           </div>
         </div>
         <div id="unitList" class="unit-list"></div>
@@ -273,12 +348,1249 @@
                   <rect x="82" y="84" width="18" height="74" rx="7" fill="#17364f" opacity="0.9" />
                 </g>
               </svg>
+              <!-- 推土机 SVG（独立车型，非 Bugatti 滤镜变体） -->
+              <svg class="bulldozer-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="430" cy="242" rx="310" ry="14" fill="rgba(0,0,0,0.22)" />
+                <ellipse cx="430" cy="242" rx="220" ry="8" fill="rgba(0,0,0,0.10)" />
+
+                <!-- ====== 履带系统 ====== -->
+                <!-- 后履带外框 -->
+                <path d="M130 170 L330 170 A28 28 0 0 1 358 198 L358 208 A28 28 0 0 1 330 236 L130 236 A24 24 0 0 1 106 212 L106 194 A24 24 0 0 1 130 170 Z"
+                      fill="#36393e" stroke="#22252a" stroke-width="3" />
+                <path d="M135 175 L325 175 A20 20 0 0 1 345 198 L345 208 A20 20 0 0 1 325 228 L135 228 A16 16 0 0 1 119 212 L119 194 A16 16 0 0 1 135 175 Z"
+                      fill="#1f2227" />
+                <!-- 后履带负重轮 (5个) -->
+                <circle cx="158" cy="210" r="16" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="158" cy="210" r="8" fill="#1a1d22" />
+                <circle cx="198" cy="212" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="198" cy="212" r="7" fill="#1a1d22" />
+                <circle cx="238" cy="213" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="238" cy="213" r="7" fill="#1a1d22" />
+                <circle cx="278" cy="212" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="278" cy="212" r="7" fill="#1a1d22" />
+                <circle cx="318" cy="210" r="16" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="318" cy="210" r="8" fill="#1a1d22" />
+                <!-- 后驱动链轮（高置） -->
+                <circle cx="140" cy="195" r="22" fill="#45484f" stroke="#2d3035" stroke-width="3" />
+                <circle cx="140" cy="195" r="13" fill="#2a2d32" />
+                <circle cx="140" cy="195" r="5" fill="#1a1d22" />
+                <!-- 链轮齿 -->
+                <g fill="#45484f" stroke="#2d3035" stroke-width="1.5">
+                  <rect x="135" y="172" width="10" height="6" rx="1.5" /><rect x="123" y="178" width="6" height="10" rx="1.5" />
+                  <rect x="118" y="190" width="6" height="10" rx="1.5" /><rect x="123" y="202" width="6" height="10" rx="1.5" />
+                  <rect x="135" y="212" width="10" height="6" rx="1.5" /><rect x="151" y="216" width="6" height="8" rx="1.5" />
+                  <rect x="160" y="215" width="6" height="8" rx="1.5" />
+                </g>
+
+                <!-- 前履带外框 -->
+                <path d="M440 170 L640 170 A28 28 0 0 1 668 198 L668 208 A28 28 0 0 1 640 236 L440 236 A24 24 0 0 1 416 212 L416 194 A24 24 0 0 1 440 170 Z"
+                      fill="#36393e" stroke="#22252a" stroke-width="3" />
+                <path d="M445 175 L635 175 A20 20 0 0 1 655 198 L655 208 A20 20 0 0 1 635 228 L445 228 A16 16 0 0 1 429 212 L429 194 A16 16 0 0 1 445 175 Z"
+                      fill="#1f2227" />
+                <!-- 前履带负重轮 (5个) -->
+                <circle cx="468" cy="210" r="16" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="468" cy="210" r="8" fill="#1a1d22" />
+                <circle cx="508" cy="212" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="508" cy="212" r="7" fill="#1a1d22" />
+                <circle cx="548" cy="213" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="548" cy="213" r="7" fill="#1a1d22" />
+                <circle cx="588" cy="212" r="14" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="588" cy="212" r="7" fill="#1a1d22" />
+                <circle cx="628" cy="210" r="16" fill="#3a3d44" stroke="#282b30" stroke-width="2" />
+                <circle cx="628" cy="210" r="8" fill="#1a1d22" />
+                <!-- 前驱动链轮 -->
+                <circle cx="450" cy="195" r="22" fill="#45484f" stroke="#2d3035" stroke-width="3" />
+                <circle cx="450" cy="195" r="13" fill="#2a2d32" />
+                <circle cx="450" cy="195" r="5" fill="#1a1d22" />
+                <g fill="#45484f" stroke="#2d3035" stroke-width="1.5">
+                  <rect x="445" y="172" width="10" height="6" rx="1.5" /><rect x="433" y="178" width="6" height="10" rx="1.5" />
+                  <rect x="428" y="190" width="6" height="10" rx="1.5" /><rect x="433" y="202" width="6" height="10" rx="1.5" />
+                  <rect x="445" y="212" width="10" height="6" rx="1.5" /><rect x="461" y="216" width="6" height="8" rx="1.5" />
+                  <rect x="470" y="215" width="6" height="8" rx="1.5" />
+                </g>
+
+                <!-- 履带架连接梁 -->
+                <rect x="355" y="198" width="65" height="10" rx="3" fill="#45484f" stroke="#2d3035" stroke-width="1.5" />
+
+                <!-- ====== 车身主体 ====== -->
+                <!-- 主车身 -->
+                <rect x="215" y="100" width="395" height="72" rx="10" fill="#e8a820" stroke="#c48a18" stroke-width="3" />
+                <!-- 车身渐变高光 -->
+                <rect x="218" y="102" width="389" height="35" rx="8" fill="rgba(255,255,255,0.08)" />
+                <!-- 引擎舱（后部） -->
+                <rect x="220" y="94" width="135" height="14" rx="5" fill="#d4941a" stroke="#b07814" stroke-width="2" />
+                <!-- 引擎舱散热格栅 -->
+                <g stroke="#b07814" stroke-width="1.5" opacity="0.6">
+                  <line x1="235" y1="97" x2="235" y2="105" /><line x1="245" y1="97" x2="245" y2="105" />
+                  <line x1="255" y1="97" x2="255" y2="105" /><line x1="265" y1="97" x2="265" y2="105" />
+                  <line x1="275" y1="97" x2="275" y2="105" /><line x1="285" y1="97" x2="285" y2="105" />
+                  <line x1="295" y1="97" x2="295" y2="105" /><line x1="305" y1="97" x2="305" y2="105" />
+                  <line x1="315" y1="97" x2="315" y2="105" /><line x1="325" y1="97" x2="325" y2="105" />
+                  <line x1="335" y1="97" x2="335" y2="105" /><line x1="345" y1="97" x2="345" y2="105" />
+                </g>
+                <!-- 车身侧板分割线 -->
+                <line x1="355" y1="100" x2="355" y2="172" stroke="#c48a18" stroke-width="1.5" opacity="0.5" />
+                <!-- 车身铆钉/螺栓排 -->
+                <g fill="#c48a18">
+                  <circle cx="240" cy="125" r="2.5" /><circle cx="240" cy="140" r="2.5" /><circle cx="240" cy="155" r="2.5" />
+                  <circle cx="580" cy="125" r="2.5" /><circle cx="580" cy="140" r="2.5" /><circle cx="580" cy="155" r="2.5" />
+                </g>
+                <!-- 车身侧面装饰条 -->
+                <line x1="225" y1="122" x2="605" y2="122" stroke="#f2cc50" stroke-width="2" opacity="0.45" />
+                <!-- 油箱 -->
+                <rect x="360" y="115" width="55" height="28" rx="6" fill="#d4941a" stroke="#b07814" stroke-width="2" />
+                <rect x="370" y="120" width="35" height="18" rx="3" fill="#c48a18" opacity="0.4" />
+                <!-- 登车踏板 -->
+                <rect x="420" y="155" width="40" height="6" rx="2" fill="#606060" stroke="#484848" stroke-width="1.5" />
+                <rect x="425" y="162" width="35" height="6" rx="2" fill="#555" stroke="#404040" stroke-width="1.5" />
+
+                <!-- ====== 驾驶室 ====== -->
+                <rect x="425" y="48" width="160" height="56" rx="8" fill="#e8a820" stroke="#c48a18" stroke-width="3" />
+                <!-- 驾驶室顶棚 -->
+                <rect x="420" y="44" width="170" height="8" rx="4" fill="#d4941a" stroke="#b07814" stroke-width="2" />
+                <!-- 车门 -->
+                <rect x="435" y="55" width="55" height="48" rx="4" fill="#d4941a" stroke="#b07814" stroke-width="1.5" />
+                <rect x="438" y="58" width="49" height="42" rx="3" fill="#e0a420" />
+                <!-- 车门把手 -->
+                <rect x="470" y="78" width="14" height="5" rx="2" fill="#555" />
+                <!-- 车窗 -->
+                <rect x="498" y="54" width="78" height="46" rx="5" fill="#a8d4ea" stroke="#6ea3be" stroke-width="2.5" />
+                <!-- 侧窗 -->
+                <rect x="498" y="56" width="35" height="42" rx="3" fill="#b8e0f5" stroke="#6ea3be" stroke-width="1.5" />
+                <!-- 前挡风 -->
+                <rect x="538" y="56" width="35" height="42" rx="3" fill="#c0e8fa" stroke="#6ea3be" stroke-width="1.5" />
+                <!-- 车窗反光 -->
+                <line x1="515" y1="56" x2="505" y2="100" stroke="rgba(255,255,255,0.35)" stroke-width="3" />
+                <line x1="555" y1="56" x2="548" y2="100" stroke="rgba(255,255,255,0.25)" stroke-width="2" />
+
+                <!-- ====== ROPS 防滚架 ====== -->
+                <rect x="470" y="28" width="7" height="22" rx="3" fill="#5a5e64" stroke="#44474c" stroke-width="1.5" />
+                <rect x="555" y="28" width="7" height="22" rx="3" fill="#5a5e64" stroke="#44474c" stroke-width="1.5" />
+                <rect x="468" y="22" width="96" height="8" rx="3" fill="#5a5e64" stroke="#44474c" stroke-width="1.5" />
+
+                <!-- ====== 排气管 & 空滤 ====== -->
+                <!-- 排气管主体 -->
+                <rect x="285" y="58" width="14" height="40" rx="3" fill="#4a4a4a" stroke="#333" stroke-width="2" />
+                <!-- 排气管隔热罩 -->
+                <rect x="282" y="65" width="20" height="28" rx="2" fill="#666" stroke="#555" stroke-width="1" opacity="0.7" />
+                <!-- 排气管弯头顶部 -->
+                <rect x="280" y="52" width="28" height="10" rx="4" fill="#555" stroke="#444" stroke-width="1.5" />
+                <ellipse cx="294" cy="54" rx="5" ry="2.5" fill="#333" />
+                <!-- 空气预滤器 -->
+                <rect x="340" y="68" width="16" height="22" rx="4" fill="#4a4a4a" stroke="#333" stroke-width="1.5" />
+                <circle cx="348" cy="66" r="9" fill="#555" stroke="#444" stroke-width="1.5" />
+                <circle cx="348" cy="66" r="5" fill="#444" />
+
+                <!-- ====== 前推土铲 ====== -->
+                <!-- 主铲板 -->
+                <path d="M600 52 C650 52, 710 64, 740 90 L740 215 C710 222, 650 225, 600 222 Z"
+                      fill="#cc8812" stroke="#a06a0e" stroke-width="3.5" />
+                <!-- 铲板上部高光 -->
+                <path d="M603 56 C650 56, 707 67, 736 92" fill="none" stroke="#e8b840" stroke-width="3" opacity="0.6" />
+                <!-- 铲刃（底部深色切割边） -->
+                <path d="M600 210 L740 208 L740 215 C710 222, 650 225, 600 222 Z"
+                      fill="#8a5a08" stroke="#6a4206" stroke-width="2" />
+                <path d="M600 215 L740 213 L740 215 C710 222, 650 225, 600 222 Z"
+                      fill="#c0c0c0" opacity="0.5" />
+                <!-- 铲板加强筋（竖） -->
+                <line x1="630" y1="75" x2="635" y2="215" stroke="#d4941a" stroke-width="5" opacity="0.6" />
+                <line x1="670" y1="65" x2="675" y2="215" stroke="#d4941a" stroke-width="5" opacity="0.6" />
+                <line x1="710" y1="80" x2="713" y2="213" stroke="#d4941a" stroke-width="4" opacity="0.5" />
+                <!-- 铲板横向加强筋 -->
+                <line x1="610" y1="130" x2="735" y2="128" stroke="#d4941a" stroke-width="3" opacity="0.35" />
+                <line x1="608" y1="170" x2="737" y2="168" stroke="#d4941a" stroke-width="3" opacity="0.3" />
+                <!-- 端刃（左右侧板） -->
+                <path d="M600 52 L610 52 L610 222 L600 222 Z" fill="#a8780e" stroke="#8a5a08" stroke-width="1.5" />
+
+                <!-- ====== 液压系统 ====== -->
+                <!-- 上推臂 -->
+                <rect x="580" y="105" width="28" height="11" rx="4" fill="#909090" stroke="#707070" stroke-width="2" />
+                <!-- 下推臂 -->
+                <rect x="578" y="172" width="32" height="11" rx="4" fill="#909090" stroke="#707070" stroke-width="2" />
+                <!-- 举升液压缸（外筒） -->
+                <rect x="590" y="114" width="10" height="60" rx="4" fill="#b0b0b0" stroke="#888" stroke-width="2" />
+                <!-- 举升液压缸（活塞杆） -->
+                <rect x="592" y="108" width="6" height="12" rx="2" fill="#d0d0d0" stroke="#aaa" stroke-width="1" />
+                <!-- 液压管 -->
+                <line x1="588" y1="124" x2="588" y2="140" stroke="#666" stroke-width="2.5" />
+                <line x1="600" y1="124" x2="600" y2="140" stroke="#666" stroke-width="2.5" />
+                <!-- 倾斜油缸 -->
+                <rect x="612" y="120" width="30" height="7" rx="3" fill="#a0a0a0" stroke="#777" stroke-width="1.5" transform="rotate(-5 612 123)" />
+
+                <!-- ====== 后部裂土器 ====== -->
+                <!-- 裂土器架 -->
+                <rect x="195" y="108" width="28" height="14" rx="3" fill="#707070" stroke="#555" stroke-width="2" />
+                <!-- 三个裂土齿 -->
+                <g>
+                  <!-- 齿1 -->
+                  <rect x="200" y="100" width="7" height="26" rx="2" fill="#666" stroke="#444" stroke-width="1.5" />
+                  <path d="M200 122 L196 136 L209 136 Z" fill="#909090" stroke="#666" stroke-width="1" />
+                  <!-- 齿2 -->
+                  <rect x="212" y="98" width="7" height="20" rx="2" fill="#666" stroke="#444" stroke-width="1.5" />
+                  <path d="M212 116 L208 128 L221 128 Z" fill="#909090" stroke="#666" stroke-width="1" />
+                </g>
+
+                <!-- ====== 灯光 & 附件 ====== -->
+                <!-- 前大灯 -->
+                <rect x="595" y="118" width="8" height="20" rx="3" fill="#fff8d0" stroke="#c48a18" stroke-width="1.5" />
+                <rect x="595" y="122" width="8" height="12" rx="2" fill="#ffffff" opacity="0.9" />
+                <!-- 后工作灯 -->
+                <circle cx="225" cy="108" r="5" fill="#ff8844" stroke="#cc6622" stroke-width="1" />
+                <!-- 车顶旋转警示灯 -->
+                <rect x="450" y="36" width="10" height="10" rx="2" fill="#ff5522" stroke="#cc3300" stroke-width="1" />
+                <circle cx="455" cy="40" r="4" fill="#ff7733" />
+                <!-- 后视镜 -->
+                <rect x="575" y="52" width="12" height="6" rx="2" fill="#5a5e64" stroke="#444" stroke-width="1" />
+                <rect x="583" y="48" width="5" height="12" rx="2" fill="#555" />
+                <!-- 前牵引钩 -->
+                <path d="M735 200 L750 200 L748 208 L735 205 Z" fill="#777" stroke="#555" stroke-width="1.5" />
+              </svg>
+              <!-- 警车 SVG（独立车型，轿车造型） -->
+              <svg class="police-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="440" cy="238" rx="300" ry="12" fill="rgba(0,0,0,0.2)" />
+                <!-- 后轮（左） -->
+                <circle cx="270" cy="200" r="58" fill="#1a1d22" />
+                <circle cx="270" cy="200" r="50" fill="#2a2d33" />
+                <circle cx="270" cy="200" r="36" fill="#3a3e45" />
+                <circle cx="270" cy="200" r="24" fill="#8a8e95" />
+                <circle cx="270" cy="200" r="12" fill="#555860" />
+                <circle cx="270" cy="200" r="5" fill="#2a2d33" />
+                <!-- 前轮（右） -->
+                <circle cx="630" cy="200" r="58" fill="#1a1d22" />
+                <circle cx="630" cy="200" r="50" fill="#2a2d33" />
+                <circle cx="630" cy="200" r="36" fill="#3a3e45" />
+                <circle cx="630" cy="200" r="24" fill="#8a8e95" />
+                <circle cx="630" cy="200" r="12" fill="#555860" />
+                <circle cx="630" cy="200" r="5" fill="#2a2d33" />
+                <!-- 车身底部深色区域 -->
+                <path d="M90 195 L810 195 L810 215 Q810 225 795 225 L105 225 Q90 225 90 215 Z"
+                      fill="#1a1e24" stroke="#111419" stroke-width="2" />
+                <!-- 车身主体（白色） -->
+                <path d="M95 140 L200 110 L280 80 L620 80 L700 110 L805 140 L805 198 Q805 208 790 208 L110 208 Q95 208 95 198 Z"
+                      fill="#f5f5f5" stroke="#d0d0d0" stroke-width="2.5" />
+                <!-- 车身侧面蓝色条纹 -->
+                <path d="M98 168 L802 168 L802 182 L98 182 Z"
+                      fill="#003399" />
+                <!-- 条纹上方细白边 -->
+                <line x1="98" y1="168" x2="802" y2="168" stroke="#ffffff" stroke-width="2" />
+                <!-- 后车门缝隙 -->
+                <line x1="420" y1="140" x2="420" y2="205" stroke="#cccccc" stroke-width="1.5" />
+                <!-- 前车门缝隙 -->
+                <line x1="540" y1="140" x2="540" y2="205" stroke="#cccccc" stroke-width="1.5" />
+                <!-- 前翼子板线 -->
+                <line x1="660" y1="135" x2="660" y2="195" stroke="#cccccc" stroke-width="1.5" />
+                <!-- 车窗区域（深色） -->
+                <path d="M200 112 L280 82 L620 82 L700 112 L700 142 L200 142 Z"
+                      fill="#222830" stroke="#111419" stroke-width="2" />
+                <!-- 后侧窗 -->
+                <path d="M205 115 L275 87 L400 87 L400 140 L205 140 Z"
+                      fill="#3a4455" stroke="#111419" stroke-width="1.5" />
+                <!-- 后侧窗反光 -->
+                <line x1="220" y1="115" x2="210" y2="138" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+                <!-- 前侧窗 -->
+                <path d="M425 87 L540 87 L540 140 L425 140 Z"
+                      fill="#3a4455" stroke="#111419" stroke-width="1.5" />
+                <!-- 前侧窗反光 -->
+                <line x1="440" y1="90" x2="435" y2="138" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+                <!-- 前挡风玻璃 -->
+                <path d="M560 87 L620 82 L695 112 L695 140 L560 140 Z"
+                      fill="#4a5568" stroke="#111419" stroke-width="1.5" />
+                <path d="M580 87 L630 84 L690 112 L690 140 L580 140 Z"
+                      fill="#5a6878" opacity="0.6" />
+                <!-- 车顶（白色） -->
+                <path d="M270 80 L630 80 L620 60 L280 60 Z"
+                      fill="#f0f0f0" stroke="#d0d0d0" stroke-width="2" />
+                <!-- 车顶警灯条底座 -->
+                <rect x="310" y="48" width="280" height="14" rx="4" fill="#1a1a1a" stroke="#111" stroke-width="1.5" />
+                <!-- 警灯：红色灯罩 -->
+                <rect x="320" y="42" width="40" height="12" rx="5" fill="#dd1111" stroke="#990000" stroke-width="1.5" />
+                <rect x="380" y="42" width="40" height="12" rx="5" fill="#dd1111" stroke="#990000" stroke-width="1.5" />
+                <rect x="500" y="42" width="40" height="12" rx="5" fill="#dd1111" stroke="#990000" stroke-width="1.5" />
+                <!-- 警灯：蓝色灯罩 -->
+                <rect x="365" y="42" width="40" height="12" rx="5" fill="#1133dd" stroke="#001199" stroke-width="1.5" />
+                <rect x="425" y="42" width="40" height="12" rx="5" fill="#1133dd" stroke="#001199" stroke-width="1.5" />
+                <rect x="545" y="42" width="35" height="12" rx="5" fill="#1133dd" stroke="#001199" stroke-width="1.5" />
+                <!-- 警灯闪烁光晕（红） -->
+                <circle cx="340" cy="48" r="8" fill="#ff3333" opacity="0.5">
+                  <animate attributeName="opacity" values="0.5;0.9;0.5" dur="0.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="400" cy="48" r="8" fill="#ff3333" opacity="0.7">
+                  <animate attributeName="opacity" values="0.7;0.2;0.7" dur="0.5s" repeatCount="indefinite" />
+                </circle>
+                <!-- 警灯闪烁光晕（蓝） -->
+                <circle cx="385" cy="48" r="8" fill="#3366ff" opacity="0.7">
+                  <animate attributeName="opacity" values="0.3;0.85;0.3" dur="0.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="445" cy="48" r="8" fill="#3366ff" opacity="0.5">
+                  <animate attributeName="opacity" values="0.5;0.2;0.5" dur="0.5s" repeatCount="indefinite" />
+                </circle>
+                <!-- 车门上的警徽 -->
+                <circle cx="480" cy="158" r="16" fill="#ffcc00" stroke="#cc9900" stroke-width="1.5" />
+                <path d="M474 152 L486 152 L480 145 Z" fill="#003399" />
+                <text x="480" y="163" text-anchor="middle" font-size="8" font-weight="900" fill="#003399" font-family="Arial">POLICE</text>
+                <!-- 车身 "POLICE" 大字 -->
+                <text x="350" y="195" text-anchor="middle" font-size="28" font-weight="900" fill="#003399" font-family="Arial, sans-serif" letter-spacing="4">POLICE</text>
+                <!-- 前保险杠 / 推杆 -->
+                <rect x="780" y="155" width="16" height="55" rx="4" fill="#333" stroke="#222" stroke-width="2" />
+                <rect x="788" y="145" width="16" height="75" rx="4" fill="#444" stroke="#333" stroke-width="1.5" />
+                <rect x="775" y="163" width="36" height="8" rx="2" fill="#555" stroke="#444" stroke-width="1" />
+                <rect x="775" y="195" width="36" height="8" rx="2" fill="#555" stroke="#444" stroke-width="1" />
+                <!-- 前大灯 -->
+                <path d="M795 145 L808 140 L808 160 L795 160 Z" fill="#fff8e0" stroke="#ccc" stroke-width="1.5" />
+                <rect x="798" y="143" width="8" height="14" rx="2" fill="#ffffff" />
+                <!-- 前转向灯 -->
+                <rect x="795" y="165" width="12" height="8" rx="2" fill="#ff9933" stroke="#cc7722" stroke-width="1" />
+                <!-- 后尾灯 -->
+                <rect x="95" y="148" width="14" height="28" rx="3" fill="#dd2222" stroke="#991111" stroke-width="1.5" />
+                <rect x="95" y="150" width="10" height="16" rx="2" fill="#ff4444" opacity="0.8" />
+                <!-- 后转向灯 -->
+                <rect x="95" y="180" width="12" height="8" rx="2" fill="#ff9933" stroke="#cc7722" stroke-width="1" />
+                <!-- 后保险杠 -->
+                <rect x="84" y="198" width="20" height="20" rx="4" fill="#333" stroke="#222" stroke-width="1.5" />
+                <!-- 侧后视镜 -->
+                <path d="M560 80 L575 70 L580 85 L565 90 Z" fill="#333" stroke="#222" stroke-width="1.5" />
+                <rect x="570" y="72" width="8" height="8" rx="2" fill="#5588cc" opacity="0.6" />
+                <!-- 天线 -->
+                <line x1="310" y1="48" x2="300" y2="8" stroke="#333" stroke-width="2.5" />
+                <circle cx="300" cy="6" r="3" fill="#444" />
+              </svg>
+              <!-- 出租车 SVG（经典黄色出租车，车顶白色小牌，车身 TAXI 标识） -->
+              <svg class="taxi-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="440" cy="238" rx="290" ry="12" fill="rgba(0,0,0,0.18)" />
+                <!-- 后轮（左） -->
+                <circle cx="280" cy="200" r="54" fill="#1a1d22" />
+                <circle cx="280" cy="200" r="46" fill="#2a2d33" />
+                <circle cx="280" cy="200" r="34" fill="#3a3e45" />
+                <circle cx="280" cy="200" r="22" fill="#8a8e95" />
+                <circle cx="280" cy="200" r="11" fill="#555860" />
+                <circle cx="280" cy="200" r="4" fill="#2a2d33" />
+                <!-- 前轮（右） -->
+                <circle cx="620" cy="200" r="54" fill="#1a1d22" />
+                <circle cx="620" cy="200" r="46" fill="#2a2d33" />
+                <circle cx="620" cy="200" r="34" fill="#3a3e45" />
+                <circle cx="620" cy="200" r="22" fill="#8a8e95" />
+                <circle cx="620" cy="200" r="11" fill="#555860" />
+                <circle cx="620" cy="200" r="4" fill="#2a2d33" />
+                <!-- 车身底部深色区域 -->
+                <path d="M100 195 L800 195 L800 215 Q800 225 785 225 L115 225 Q100 225 100 215 Z"
+                      fill="#1a1e24" stroke="#111419" stroke-width="2" />
+                <!-- 车身主体（出租车黄） -->
+                <path d="M100 140 L210 108 L290 78 L610 78 L690 108 L800 140 L800 198 Q800 208 785 208 L115 208 Q100 208 100 198 Z"
+                      fill="#f5c400" stroke="#d4a800" stroke-width="2.5" />
+                <!-- 车身渐变高光 -->
+                <path d="M105 145 L105 190 L790 190 L790 145 L705 112 L615 82 L298 82 Z"
+                      fill="rgba(255,255,255,0.06)" />
+                <!-- 车身高光条 -->
+                <line x1="110" y1="150" x2="790" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+                <!-- 黑白棋盘格装饰带 -->
+                <path d="M100 168 L800 168 L800 182 L100 182 Z" fill="#1a1a1a" />
+                <g fill="#ffffff" opacity="0.95">
+                  <rect x="100" y="168" width="20" height="14" /><rect x="140" y="168" width="20" height="14" />
+                  <rect x="180" y="168" width="20" height="14" /><rect x="220" y="168" width="20" height="14" />
+                  <rect x="260" y="168" width="20" height="14" /><rect x="300" y="168" width="20" height="14" />
+                  <rect x="340" y="168" width="20" height="14" /><rect x="380" y="168" width="20" height="14" />
+                  <rect x="420" y="168" width="20" height="14" /><rect x="460" y="168" width="20" height="14" />
+                  <rect x="500" y="168" width="20" height="14" /><rect x="540" y="168" width="20" height="14" />
+                  <rect x="580" y="168" width="20" height="14" /><rect x="620" y="168" width="20" height="14" />
+                  <rect x="660" y="168" width="20" height="14" /><rect x="700" y="168" width="20" height="14" />
+                  <rect x="740" y="168" width="20" height="14" /><rect x="780" y="168" width="20" height="14" />
+                </g>
+                <!-- 车门接缝 -->
+                <line x1="430" y1="140" x2="430" y2="204" stroke="#c49a00" stroke-width="1.5" />
+                <line x1="540" y1="140" x2="540" y2="204" stroke="#c49a00" stroke-width="1.5" />
+                <!-- 前翼子板线 -->
+                <line x1="650" y1="135" x2="650" y2="195" stroke="#c49a00" stroke-width="1.5" />
+                <!-- 车窗区域（深色） -->
+                <path d="M210 110 L290 80 L610 80 L690 110 L690 142 L210 142 Z"
+                      fill="#1a222e" stroke="#111820" stroke-width="2" />
+                <!-- 后侧窗 -->
+                <path d="M215 113 L290 85 L410 85 L410 140 L215 140 Z"
+                      fill="#263242" stroke="#111820" stroke-width="1.5" />
+                <line x1="230" y1="113" x2="220" y2="138" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+                <!-- 前侧窗 -->
+                <path d="M435 85 L540 85 L540 140 L435 140 Z"
+                      fill="#263242" stroke="#111820" stroke-width="1.5" />
+                <line x1="450" y1="88" x2="445" y2="138" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+                <!-- 前挡风玻璃 -->
+                <path d="M555 85 L615 80 L688 110 L688 140 L555 140 Z"
+                      fill="#2d3a4d" stroke="#111820" stroke-width="1.5" />
+                <path d="M570 85 L625 82 L683 110 L683 140 L570 140 Z"
+                      fill="#3a4a60" opacity="0.5" />
+                <line x1="618" y1="82" x2="615" y2="138" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+
+                <!-- 车顶 -->
+                <path d="M280 78 L620 78 L610 58 L290 58 Z"
+                      fill="#e8b800" stroke="#c49a00" stroke-width="1.5" />
+                <!-- 车顶白色 TAXI 小牌 -->
+                <rect x="370" y="42" width="160" height="18" rx="5" fill="#ffffff" stroke="#dddddd" stroke-width="1.5" />
+                <rect x="375" y="44" width="150" height="14" rx="3" fill="#fafafa" />
+                <text x="450" y="55" text-anchor="middle" font-size="11" font-weight="900" fill="#1a1a1a" font-family="Arial, sans-serif" letter-spacing="3">TAXI</text>
+                <!-- 车顶牌支架 -->
+                <rect x="440" y="58" width="20" height="4" rx="1" fill="#888888" />
+                <rect x="440" y="60" width="20" height="2" rx="1" fill="#999999" />
+
+                <!-- 车身侧面 "TAXI" 大字 -->
+                <text x="330" y="200" text-anchor="middle" font-size="26" font-weight="900" fill="#1a1a1a" font-family="Arial, sans-serif" letter-spacing="5">TAXI</text>
+
+                <!-- 前挡泥板 / 保险杠 -->
+                <rect x="770" y="155" width="14" height="55" rx="3" fill="#cccccc" stroke="#aaaaaa" stroke-width="1.5" />
+                <rect x="778" y="148" width="10" height="68" rx="2" fill="#dddddd" stroke="#bbbbbb" stroke-width="1" />
+                <!-- 前大灯 -->
+                <path d="M785 145 L798 140 L798 158 L785 158 Z" fill="#fff8e0" stroke="#cccccc" stroke-width="1.5" />
+                <rect x="788" y="143" width="7" height="12" rx="2" fill="#ffffff" />
+                <!-- 前转向灯 -->
+                <rect x="785" y="163" width="10" height="8" rx="2" fill="#ff9900" stroke="#cc7700" stroke-width="1" />
+                <!-- 后尾灯 -->
+                <rect x="100" y="148" width="12" height="24" rx="3" fill="#dd2222" stroke="#991111" stroke-width="1.5" />
+                <rect x="102" y="150" width="8" height="14" rx="2" fill="#ff4444" opacity="0.8" />
+                <!-- 后转向灯 -->
+                <rect x="102" y="170" width="8" height="6" rx="1" fill="#ff9900" stroke="#cc7700" stroke-width="1" />
+                <!-- 后保险杠 -->
+                <rect x="90" y="198" width="18" height="20" rx="3" fill="#555555" stroke="#444444" stroke-width="1.5" />
+
+                <!-- 侧后视镜 -->
+                <path d="M555 78 L570 68 L575 82 L560 88 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5" />
+                <rect x="564" y="70" width="7" height="7" rx="2" fill="#5588cc" opacity="0.5" />
+                <!-- 左侧后视镜 -->
+                <path d="M225 100 L210 90 L205 104 L220 110 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5" />
+                <rect x="210" y="92" width="7" height="7" rx="2" fill="#5588cc" opacity="0.5" />
+
+                <!-- 车门把手 -->
+                <rect x="445" y="145" width="18" height="4" rx="2" fill="#aaaaaa" stroke="#888888" stroke-width="1" />
+                <rect x="555" y="145" width="18" height="4" rx="2" fill="#aaaaaa" stroke="#888888" stroke-width="1" />
+
+                <!-- 天线 -->
+                <line x1="480" y1="42" x2="475" y2="6" stroke="#333333" stroke-width="2" />
+                <circle cx="475" cy="4" r="3" fill="#444444" />
+              </svg>
+              <!-- 消防车 SVG（云梯消防车，含伸缩云梯和工作平台） -->
+              <svg class="firetruck-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="460" cy="242" rx="350" ry="12" fill="rgba(0,0,0,0.18)" />
+
+                <!-- ====== 4组车轮（多轴重型底盘） ====== -->
+                <!-- 第1组（左/后部，双轮） -->
+                <circle cx="200" cy="202" r="48" fill="#1a1d22" />
+                <circle cx="200" cy="202" r="42" fill="#22252a" />
+                <circle cx="200" cy="202" r="36" fill="#2a2d33" />
+                <circle cx="200" cy="202" r="27" fill="#3a3e45" />
+                <circle cx="200" cy="202" r="18" fill="#8a8e95" />
+                <circle cx="200" cy="202" r="9" fill="#555860" />
+                <circle cx="200" cy="202" r="4" fill="#2a2d33" />
+                <!-- 内侧轮 -->
+                <circle cx="200" cy="202" r="33" fill="#1e2228" />
+                <circle cx="200" cy="202" r="22" fill="#252930" />
+                <!-- 第2组（左中） -->
+                <circle cx="355" cy="202" r="48" fill="#1a1d22" />
+                <circle cx="355" cy="202" r="42" fill="#22252a" />
+                <circle cx="355" cy="202" r="36" fill="#2a2d33" />
+                <circle cx="355" cy="202" r="27" fill="#3a3e45" />
+                <circle cx="355" cy="202" r="18" fill="#8a8e95" />
+                <circle cx="355" cy="202" r="9" fill="#555860" />
+                <circle cx="355" cy="202" r="4" fill="#2a2d33" />
+                <circle cx="355" cy="202" r="33" fill="#1e2228" />
+                <circle cx="355" cy="202" r="22" fill="#252930" />
+                <!-- 第3组（右中/驱动轴） -->
+                <circle cx="535" cy="202" r="48" fill="#1a1d22" />
+                <circle cx="535" cy="202" r="42" fill="#22252a" />
+                <circle cx="535" cy="202" r="36" fill="#2a2d33" />
+                <circle cx="535" cy="202" r="27" fill="#3a3e45" />
+                <circle cx="535" cy="202" r="18" fill="#8a8e95" />
+                <circle cx="535" cy="202" r="9" fill="#555860" />
+                <circle cx="535" cy="202" r="4" fill="#2a2d33" />
+                <circle cx="535" cy="202" r="33" fill="#1e2228" />
+                <circle cx="535" cy="202" r="22" fill="#252930" />
+                <!-- 第4组（右/前转向轴） -->
+                <circle cx="710" cy="202" r="48" fill="#1a1d22" />
+                <circle cx="710" cy="202" r="42" fill="#22252a" />
+                <circle cx="710" cy="202" r="36" fill="#2a2d33" />
+                <circle cx="710" cy="202" r="27" fill="#3a3e45" />
+                <circle cx="710" cy="202" r="18" fill="#8a8e95" />
+                <circle cx="710" cy="202" r="9" fill="#555860" />
+                <circle cx="710" cy="202" r="4" fill="#2a2d33" />
+                <circle cx="710" cy="202" r="33" fill="#1e2228" />
+                <circle cx="710" cy="202" r="22" fill="#252930" />
+
+                <!-- ====== 底盘 ====== -->
+                <path d="M120 198 L800 198 L800 216 Q800 226 782 226 L138 226 Q120 226 120 216 Z" fill="#14181f" stroke="#0e1116" stroke-width="2.5" />
+                <path d="M130 202 L790 202 L790 210 L130 210 Z" fill="#1e232b" opacity="0.5" />
+
+                <!-- ====== 车身主体（消防红） ====== -->
+                <path d="M130 130 L130 210 Q130 218 140 218 L780 218 Q790 218 790 210 L790 145 L740 82 L570 82 L570 130 Z"
+                      fill="#d42828" stroke="#aa1919" stroke-width="2.5" />
+                <!-- 车身渐变高光 -->
+                <path d="M135 135 L135 200 L775 200 L775 148" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6" />
+
+                <!-- ====== 白色装饰条纹 ====== -->
+                <!-- 上条纹 -->
+                <path d="M135 135 L785 135 L785 142 L135 142 Z" fill="#ffffff" opacity="0.92" />
+                <!-- 下条纹 -->
+                <path d="M135 180 L785 180 L785 187 L135 187 Z" fill="#ffffff" opacity="0.92" />
+                <!-- 条纹高光 -->
+                <line x1="135" y1="138" x2="785" y2="138" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" />
+                <line x1="135" y1="183" x2="785" y2="183" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" />
+
+                <!-- ====== 设备舱体（中部及后部） ====== -->
+                <path d="M130 142 L555 142 L555 210 Q555 218 545 218 L140 218 Q130 218 130 210 Z"
+                      fill="#c22323" stroke="#aa1919" stroke-width="2" />
+                <!-- 设备舱顶部平台 -->
+                <rect x="136" y="138" width="415" height="6" rx="2" fill="#991515" stroke="#771010" stroke-width="1" />
+                <!-- 银色卷帘门储物舱 1 -->
+                <rect x="170" y="148" width="90" height="64" rx="3" fill="#cdd1d5" stroke="#a8acb0" stroke-width="1.5" />
+                <g stroke="#b0b4b8" stroke-width="1" opacity="0.7">
+                  <line x1="180" y1="154" x2="180" y2="208" /><line x1="195" y1="154" x2="195" y2="208" />
+                  <line x1="210" y1="154" x2="210" y2="208" /><line x1="225" y1="154" x2="225" y2="208" />
+                  <line x1="240" y1="154" x2="240" y2="208" />
+                </g>
+                <!-- 卷帘门把手 -->
+                <rect x="210" y="148" width="14" height="4" rx="2" fill="#888" />
+                <!-- 银色卷帘门储物舱 2 -->
+                <rect x="275" y="148" width="85" height="64" rx="3" fill="#cdd1d5" stroke="#a8acb0" stroke-width="1.5" />
+                <g stroke="#b0b4b8" stroke-width="1" opacity="0.7">
+                  <line x1="285" y1="154" x2="285" y2="208" /><line x1="300" y1="154" x2="300" y2="208" />
+                  <line x1="315" y1="154" x2="315" y2="208" /><line x1="330" y1="154" x2="330" y2="208" />
+                  <line x1="345" y1="154" x2="345" y2="208" />
+                </g>
+                <rect x="315" y="148" width="14" height="4" rx="2" fill="#888" />
+                <!-- 银色卷帘门储物舱 3 -->
+                <rect x="375" y="148" width="80" height="64" rx="3" fill="#cdd1d5" stroke="#a8acb0" stroke-width="1.5" />
+                <g stroke="#b0b4b8" stroke-width="1" opacity="0.7">
+                  <line x1="385" y1="154" x2="385" y2="208" /><line x1="400" y1="154" x2="400" y2="208" />
+                  <line x1="415" y1="154" x2="415" y2="208" /><line x1="430" y1="154" x2="430" y2="208" />
+                  <line x1="445" y1="154" x2="445" y2="208" />
+                </g>
+                <rect x="415" y="148" width="14" height="4" rx="2" fill="#888" />
+                <!-- 小储物舱 4 -->
+                <rect x="470" y="148" width="60" height="64" rx="3" fill="#cdd1d5" stroke="#a8acb0" stroke-width="1.5" />
+                <g stroke="#b0b4b8" stroke-width="1" opacity="0.7">
+                  <line x1="480" y1="154" x2="480" y2="208" /><line x1="495" y1="154" x2="495" y2="208" />
+                  <line x1="510" y1="154" x2="510" y2="208" />
+                </g>
+                <rect x="500" y="148" width="14" height="4" rx="2" fill="#888" />
+
+                <!-- ====== 黄色扶手（设备舱中部） ====== -->
+                <rect x="340" y="142" width="120" height="5" rx="2" fill="#e8c820" stroke="#c4a820" stroke-width="1" />
+                <rect x="345" y="140" width="8" height="8" rx="2" fill="#d42828" />
+                <rect x="448" y="140" width="8" height="8" rx="2" fill="#d42828" />
+
+                <!-- ====== 登车踏板（设备舱下方） ====== -->
+                <rect x="290" y="216" width="40" height="8" rx="2" fill="#e8c820" stroke="#c4a820" stroke-width="1" />
+                <rect x="340" y="216" width="40" height="8" rx="2" fill="#e8c820" stroke="#c4a820" stroke-width="1" />
+                <rect x="390" y="216" width="40" height="8" rx="2" fill="#e8c820" stroke="#c4a820" stroke-width="1" />
+
+                <!-- ====== 驾驶室（右侧） ====== -->
+                <path d="M570 82 L570 210 Q570 218 580 218 L780 218 Q790 218 790 210 L790 145 L740 82 Z"
+                      fill="#c22323" stroke="#aa1919" stroke-width="2" />
+                <!-- 驾驶室顶部 -->
+                <rect x="570" y="72" width="170" height="14" rx="4" fill="#b01c1c" stroke="#991515" stroke-width="1.5" />
+                <!-- 挡风玻璃 -->
+                <path d="M580 132 L580 206 L720 206 L720 132 L680 88 L615 88 Z"
+                      fill="#1a222e" stroke="#111820" stroke-width="2.5" />
+                <path d="M615 88 L680 88 L718 132 L718 204 L582 204 L582 132 Z"
+                      fill="#263242" stroke="#111820" stroke-width="2" opacity="0.8" />
+                <!-- 挡风玻璃隔框 -->
+                <line x1="650" y1="88" x2="648" y2="204" stroke="#111820" stroke-width="2.5" />
+                <!-- 玻璃高光 -->
+                <line x1="620" y1="95" x2="615" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                <line x1="660" y1="95" x2="655" y2="200" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+                <!-- 侧窗 -->
+                <path d="M582 90 L600 90 L600 130 L582 130 Z"
+                      fill="#263242" stroke="#111820" stroke-width="2.5" />
+                <line x1="591" y1="92" x2="588" y2="128" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+
+                <!-- ====== 车顶警灯条 ====== -->
+                <rect x="572" y="56" width="165" height="14" rx="5" fill="#141414" stroke="#0a0a0a" stroke-width="1.5" />
+                <!-- 红灯 -->
+                <rect x="580" y="50" width="26" height="11" rx="5" fill="#e01111" stroke="#990000" stroke-width="1.5" />
+                <circle cx="593" cy="55" r="7" fill="#ff4444" opacity="0.55">
+                  <animate attributeName="opacity" values="0.55;0.95;0.55" dur="0.4s" repeatCount="indefinite" />
+                </circle>
+                <!-- 白灯 -->
+                <rect x="618" y="50" width="26" height="11" rx="5" fill="#eeeeee" stroke="#bbbbbb" stroke-width="1.5" />
+                <circle cx="631" cy="55" r="7" fill="#ffffff" opacity="0.6">
+                  <animate attributeName="opacity" values="0.2;0.9;0.2" dur="0.35s" repeatCount="indefinite" />
+                </circle>
+                <!-- 红灯 -->
+                <rect x="656" y="50" width="26" height="11" rx="5" fill="#e01111" stroke="#990000" stroke-width="1.5" />
+                <circle cx="669" cy="55" r="7" fill="#ff4444" opacity="0.7">
+                  <animate attributeName="opacity" values="0.7;0.15;0.7" dur="0.38s" repeatCount="indefinite" />
+                </circle>
+                <!-- 红灯 -->
+                <rect x="694" y="50" width="26" height="11" rx="5" fill="#e01111" stroke="#990000" stroke-width="1.5" />
+                <circle cx="707" cy="55" r="7" fill="#ff4444" opacity="0.5">
+                  <animate attributeName="opacity" values="0.3;0.95;0.3" dur="0.42s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- ====== 云梯底座（旋转平台） ====== -->
+                <rect x="290" y="120" width="28" height="20" rx="3" fill="#606468" stroke="#4a4e52" stroke-width="1.5" />
+                <rect x="470" y="120" width="28" height="20" rx="3" fill="#606468" stroke="#4a4e52" stroke-width="1.5" />
+                <rect x="304" y="116" width="180" height="6" rx="2" fill="#7a7e82" stroke="#5a5e62" stroke-width="1" />
+                <circle cx="394" cy="119" r="5" fill="#5a5e62" stroke="#4a4e52" stroke-width="1" />
+
+                <!-- ====== 伸缩云梯（白色，3段式） ====== -->
+                <!-- 云梯第1段（底部最宽） -->
+                <polygon points="308,118 480,118 200,50 160,38" fill="#e8e8e8" stroke="#c0c0c0" stroke-width="2" />
+                <polygon points="308,110 480,110 200,42 160,30" fill="#f5f5f5" stroke="#c0c0c0" stroke-width="2" />
+                <!-- 第1段横档 -->
+                <g stroke="#d0d0d0" stroke-width="1.5" opacity="0.7">
+                  <line x1="303" y1="112" x2="303" y2="116" />
+                  <line x1="290" y1="107" x2="290" y2="111" />
+                  <line x1="277" y1="102" x2="277" y2="106" />
+                  <line x1="264" y1="97" x2="264" y2="101" />
+                  <line x1="251" y1="92" x2="251" y2="96" />
+                  <line x1="238" y1="87" x2="238" y2="91" />
+                  <line x1="225" y1="82" x2="225" y2="86" />
+                  <line x1="212" y1="77" x2="212" y2="81" />
+                  <line x1="199" y1="72" x2="199" y2="76" />
+                  <line x1="186" y1="67" x2="186" y2="71" />
+                  <line x1="173" y1="62" x2="173" y2="66" />
+                  <line x1="160" y1="57" x2="160" y2="61" />
+                </g>
+                <!-- 云梯侧边纵梁（第1段） -->
+                <polygon points="308,118 480,118 480,110 308,110" fill="none" stroke="#b8b8b8" stroke-width="1" />
+                <polygon points="200,50 160,38 160,30 200,42" fill="none" stroke="#b8b8b8" stroke-width="1" />
+
+                <!-- 云梯第2段（中间） -->
+                <polygon points="290,106 460,106 180,41 140,29" fill="#dedede" stroke="#b4b4b4" stroke-width="1.5" />
+                <polygon points="290,98 460,98 180,33 140,21" fill="#f0f0f0" stroke="#b4b4b4" stroke-width="1.5" />
+                <!-- 第2段横档 -->
+                <g stroke="#c8c8c8" stroke-width="1.5" opacity="0.7">
+                  <line x1="285" y1="100" x2="285" y2="104" />
+                  <line x1="272" y1="95" x2="272" y2="99" />
+                  <line x1="259" y1="90" x2="259" y2="94" />
+                  <line x1="246" y1="85" x2="246" y2="89" />
+                  <line x1="233" y1="80" x2="233" y2="84" />
+                  <line x1="220" y1="75" x2="220" y2="79" />
+                  <line x1="207" y1="70" x2="207" y2="74" />
+                  <line x1="194" y1="65" x2="194" y2="69" />
+                  <line x1="181" y1="60" x2="181" y2="64" />
+                  <line x1="168" y1="55" x2="168" y2="59" />
+                  <line x1="155" y1="50" x2="155" y2="54" />
+                  <line x1="142" y1="45" x2="142" y2="49" />
+                </g>
+
+                <!-- 云梯第3段（顶部最窄） -->
+                <polygon points="272,95 440,95 160,30 120,18" fill="#e0e0e0" stroke="#aaaaaa" stroke-width="1.5" />
+                <polygon points="272,89 440,89 160,24 120,12" fill="#ececec" stroke="#aaaaaa" stroke-width="1.5" />
+                <!-- 第3段横档 -->
+                <g stroke="#c0c0c0" stroke-width="1" opacity="0.7">
+                  <line x1="267" y1="91" x2="267" y2="93" />
+                  <line x1="254" y1="86" x2="254" y2="88" />
+                  <line x1="241" y1="81" x2="241" y2="83" />
+                  <line x1="228" y1="76" x2="228" y2="78" />
+                  <line x1="215" y1="71" x2="215" y2="73" />
+                  <line x1="202" y1="66" x2="202" y2="68" />
+                  <line x1="189" y1="61" x2="189" y2="63" />
+                  <line x1="176" y1="56" x2="176" y2="58" />
+                  <line x1="163" y1="51" x2="163" y2="53" />
+                  <line x1="150" y1="46" x2="150" y2="48" />
+                  <line x1="137" y1="41" x2="137" y2="43" />
+                  <line x1="124" y1="36" x2="124" y2="38" />
+                </g>
+
+                <!-- 黑色软管（沿云梯左侧纵梁） -->
+                <polyline points="300,111 265,97 252,92 220,75 195,62 175,50 155,38 135,28 120,17"
+                          fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                <polyline points="300,111 265,97 252,92 220,75 195,62 175,50 155,38 135,28 120,17"
+                          fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+
+                <!-- ====== 云梯工作平台（篮筐） ====== -->
+                <!-- 平台底板 -->
+                <rect x="100" y="10" width="34" height="4" rx="1" fill="#e8c820" stroke="#c4a820" stroke-width="1" />
+                <!-- 平台围栏 -->
+                <rect x="98" y="2" width="3" height="12" rx="1" fill="#d0d0d0" stroke="#aaa" stroke-width="1" />
+                <rect x="131" y="2" width="3" height="12" rx="1" fill="#d0d0d0" stroke="#aaa" stroke-width="1" />
+                <rect x="98" y="2" width="36" height="3" rx="1" fill="#d0d0d0" stroke="#aaa" stroke-width="1" />
+                <line x1="108" y1="5" x2="108" y2="14" stroke="#d0d0d0" stroke-width="1.5" />
+                <line x1="118" y1="5" x2="118" y2="14" stroke="#d0d0d0" stroke-width="1.5" />
+                <line x1="125" y1="5" x2="125" y2="14" stroke="#d0d0d0" stroke-width="1.5" />
+                <!-- 篮筐连接臂 -->
+                <line x1="120" y1="12" x2="128" y2="6" stroke="#aaa" stroke-width="2" />
+                <line x1="112" y1="12" x2="104" y2="6" stroke="#aaa" stroke-width="2" />
+
+                <!-- 云梯液压支撑臂 -->
+                <line x1="394" y1="119" x2="350" y2="108" stroke="#555" stroke-width="3" stroke-linecap="round" />
+                <line x1="350" y1="108" x2="394" y2="119" stroke="#666" stroke-width="2" stroke-linecap="round" />
+
+                <!-- ====== 车身后视镜 ====== -->
+                <!-- 右后视镜 -->
+                <path d="M740 78 L760 66 L766 80 L746 92 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5" />
+                <rect x="754" y="68" width="8" height="8" rx="2" fill="#5588cc" opacity="0.6" />
+                <!-- 左后视镜 -->
+                <path d="M580 78 L560 66 L554 80 L574 92 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5" />
+                <rect x="558" y="68" width="8" height="8" rx="2" fill="#5588cc" opacity="0.6" />
+
+                <!-- ====== 前保险杠 ====== -->
+                <rect x="780" y="155" width="12" height="60" rx="3" fill="#cccccc" stroke="#aaaaaa" stroke-width="2" />
+                <rect x="786" y="148" width="8" height="72" rx="2" fill="#dddddd" stroke="#bbbbbb" stroke-width="1.5" />
+                <!-- 前大灯 -->
+                <path d="M784 145 L794 140 L794 156 L784 156 Z" fill="#fff8e0" stroke="#cccccc" stroke-width="1.5" />
+                <rect x="786" y="143" width="6" height="10" rx="2" fill="#ffffff" />
+                <!-- 转向灯 -->
+                <rect x="786" y="160" width="5" height="8" rx="1" fill="#ffaa00" opacity="0.8" />
+
+                <!-- ====== 后尾灯 ====== -->
+                <rect x="122" y="148" width="10" height="20" rx="3" fill="#e02222" stroke="#991111" stroke-width="1.5" />
+                <rect x="124" y="150" width="6" height="6" rx="1" fill="#ff4444" opacity="0.8">
+                  <animate attributeName="opacity" values="0.5;1;0.5" dur="0.6s" repeatCount="indefinite" />
+                </rect>
+                <!-- 后踏板 -->
+                <rect x="108" y="196" width="16" height="20" rx="3" fill="#505050" stroke="#3a3a3a" stroke-width="1.5" />
+                <rect x="112" y="199" width="8" height="14" rx="2" fill="#3a3a3a" />
+
+                <!-- ====== 天线 ====== -->
+                <line x1="710" y1="56" x2="702" y2="10" stroke="#333333" stroke-width="2.5" />
+                <circle cx="702" cy="8" r="3" fill="#444444" />
+
+                <!-- ====== 阀门 / 接口细节（设备舱侧面） ====== -->
+                <circle cx="150" cy="165" r="6" fill="none" stroke="#999999" stroke-width="1.5" />
+                <circle cx="150" cy="165" r="3" fill="#888888" />
+                <circle cx="150" cy="185" r="6" fill="none" stroke="#999999" stroke-width="1.5" />
+                <circle cx="150" cy="185" r="3" fill="#888888" />
+                <rect x="152" y="200" width="8" height="12" rx="2" fill="#777777" stroke="#666666" stroke-width="1" />
+
+                <!-- ====== 前牵引环 ====== -->
+                <circle cx="792" cy="192" r="6" fill="none" stroke="#aaaaaa" stroke-width="2.5" />
+
+                <!-- ====== 车身文字标识 ====== -->
+                <text x="300" y="170" text-anchor="middle" font-size="20" font-weight="900" fill="#ffffff" font-family="Arial, sans-serif" letter-spacing="2">FIRE</text>
+                <text x="440" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#ffe066" font-family="Arial, sans-serif" letter-spacing="1">RESCUE</text>
+              </svg>
+              <!-- 坦克 SVG（独立车型，主战坦克造型） -->
+              <svg class="tank-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="440" cy="240" rx="320" ry="12" fill="rgba(0,0,0,0.22)" />
+                <!-- ====== 履带系统 ====== -->
+                <!-- 履带外框 -->
+                <path d="M90 178 L710 178 L720 185 L720 225 L710 232 L90 232 L80 225 L80 185 Z"
+                      fill="#2d3322" stroke="#1a1f14" stroke-width="3" />
+                <path d="M95 182 L705 182 L712 188 L712 222 L705 228 L95 228 L88 222 L88 188 Z"
+                      fill="#1a1f14" />
+                <!-- 负重轮（7个） -->
+                <circle cx="140" cy="212" r="20" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="140" cy="212" r="10" fill="#1a1f14" />
+                <circle cx="230" cy="213" r="18" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="230" cy="213" r="9" fill="#1a1f14" />
+                <circle cx="320" cy="213" r="18" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="320" cy="213" r="9" fill="#1a1f14" />
+                <circle cx="410" cy="213" r="18" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="410" cy="213" r="9" fill="#1a1f14" />
+                <circle cx="500" cy="213" r="18" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="500" cy="213" r="9" fill="#1a1f14" />
+                <circle cx="590" cy="212" r="20" fill="#3d4430" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="590" cy="212" r="10" fill="#1a1f14" />
+                <circle cx="680" cy="210" r="22" fill="#4a5238" stroke="#2a2f1f" stroke-width="2" />
+                <circle cx="680" cy="210" r="11" fill="#1a1f14" />
+                <!-- 主动轮（后部大轮） -->
+                <circle cx="100" cy="205" r="26" fill="#4a5238" stroke="#2a2f1f" stroke-width="3" />
+                <circle cx="100" cy="205" r="15" fill="#2d3322" />
+                <circle cx="100" cy="205" r="6" fill="#1a1f14" />
+                <!-- 诱导轮（前部） -->
+                <circle cx="700" cy="205" r="24" fill="#4a5238" stroke="#2a2f1f" stroke-width="3" />
+                <circle cx="700" cy="205" r="14" fill="#2d3322" />
+                <circle cx="700" cy="205" r="5" fill="#1a1f14" />
+                <!-- 履带上方挡泥板 -->
+                <rect x="100" y="175" width="620" height="7" rx="2" fill="#3d4430" stroke="#2a2f1f" stroke-width="1.5" />
+
+                <!-- ====== 车体 ====== -->
+                <!-- 车体下部（倾斜装甲） -->
+                <path d="M120 175 L130 120 L740 120 L720 175 Z"
+                      fill="#5a6b38" stroke="#3d4a22" stroke-width="2.5" />
+                <!-- 车体上部 -->
+                <path d="M150 120 L170 70 L700 70 L730 120 Z"
+                      fill="#667a3d" stroke="#4a5a28" stroke-width="2.5" />
+                <!-- 首上装甲（倾斜面高光） -->
+                <path d="M160 120 L175 78 L690 78 L720 120 Z"
+                      fill="#6d8340" stroke="none" opacity="0.5" />
+                <!-- 车体焊接线 -->
+                <line x1="180" y1="95" x2="710" y2="95" stroke="#4a5a28" stroke-width="1.5" opacity="0.6" />
+                <!-- 驾驶员观察窗 -->
+                <rect x="195" y="82" width="22" height="8" rx="2" fill="#1a2222" stroke="#0d1111" stroke-width="1" />
+                <!-- 车体前大灯 -->
+                <rect x="730" y="108" width="12" height="16" rx="3" fill="#ddd" stroke="#999" stroke-width="1.5" />
+                <rect x="732" y="110" width="8" height="12" rx="2" fill="#fff8e0" />
+                <!-- 车体储物箱 -->
+                <rect x="580" y="114" width="70" height="22" rx="3" fill="#4d5e2e" stroke="#3d4a22" stroke-width="1.5" />
+                <rect x="655" y="114" width="55" height="22" rx="3" fill="#4d5e2e" stroke="#3d4a22" stroke-width="1.5" />
+                <!-- 储物箱绑带 -->
+                <line x1="590" y1="120" x2="640" y2="120" stroke="#3d4a22" stroke-width="1" />
+                <line x1="665" y1="120" x2="700" y2="120" stroke="#3d4a22" stroke-width="1" />
+                <!-- 发动机舱盖 -->
+                <rect x="150" y="114" width="110" height="20" rx="3" fill="#4d5e2e" stroke="#3d4a22" stroke-width="1.5" />
+                <g stroke="#3d4a22" stroke-width="1" opacity="0.5">
+                  <line x1="160" y1="118" x2="160" y2="130" /><line x1="175" y1="118" x2="175" y2="130" />
+                  <line x1="190" y1="118" x2="190" y2="130" /><line x1="205" y1="118" x2="205" y2="130" />
+                  <line x1="220" y1="118" x2="220" y2="130" /><line x1="235" y1="118" x2="235" y2="130" />
+                  <line x1="250" y1="118" x2="250" y2="130" />
+                </g>
+                <!-- 工具箱 -->
+                <rect x="280" y="116" width="60" height="18" rx="3" fill="#4d5e2e" stroke="#3d4a22" stroke-width="1.5" />
+                <!-- 车尾排气管 -->
+                <rect x="110" y="122" width="18" height="8" rx="3" fill="#444" stroke="#333" stroke-width="1.5" />
+                <rect x="105" y="124" width="8" height="4" rx="1.5" fill="#555" />
+                <!-- 车尾牵引钩 -->
+                <rect x="92" y="148" width="16" height="8" rx="3" fill="#666" stroke="#444" stroke-width="1.5" />
+
+                <!-- ====== 炮塔 ====== -->
+                <!-- 炮塔主体 -->
+                <path d="M280 65 L300 40 L560 40 L580 65 L570 110 L290 110 Z"
+                      fill="#667a3d" stroke="#4a5a28" stroke-width="2.5" />
+                <!-- 炮塔顶面高光 -->
+                <path d="M300 40 L320 32 L540 32 L560 40 Z"
+                      fill="#738a48" opacity="0.6" />
+                <!-- 炮塔前斜面 -->
+                <path d="M560 40 L580 65 L570 110 L550 65 Z"
+                      fill="#5a6b38" stroke="#4a5a28" stroke-width="1" />
+                <!-- 炮塔侧面装甲 -->
+                <line x1="300" y1="65" x2="290" y2="110" stroke="#4a5a28" stroke-width="2" />
+                <line x1="560" y1="65" x2="570" y2="110" stroke="#4a5a28" stroke-width="2" />
+                <!-- 指挥塔 -->
+                <ellipse cx="480" cy="52" rx="30" ry="14" fill="#55662e" stroke="#3d4a22" stroke-width="2" />
+                <ellipse cx="480" cy="48" rx="24" ry="10" fill="#4d5e2e" />
+                <!-- 指挥塔观察窗 -->
+                <rect x="465" y="44" width="6" height="5" rx="1" fill="#1a2222" />
+                <rect x="475" y="43" width="6" height="5" rx="1" fill="#1a2222" />
+                <rect x="485" y="44" width="6" height="5" rx="1" fill="#1a2222" />
+                <!-- 车长舱盖 -->
+                <ellipse cx="480" cy="47" rx="14" ry="7" fill="#3d4a22" />
+                <ellipse cx="480" cy="46" rx="10" ry="5" fill="#4d5e2e" />
+                <!-- 炮长瞄准镜 -->
+                <rect x="540" y="50" width="10" height="16" rx="2" fill="#1a2222" stroke="#0d1111" stroke-width="1" />
+                <circle cx="545" cy="55" r="3" fill="#335588" opacity="0.6" />
+
+                <!-- ====== 主炮 ====== -->
+                <!-- 炮盾 -->
+                <path d="M555 60 L580 50 L590 70 L555 75 Z"
+                      fill="#55662e" stroke="#3d4a22" stroke-width="2.5" />
+                <!-- 炮管 -->
+                <rect x="580" y="54" width="200" height="22" rx="6" fill="#4d5e2e" stroke="#3d4a22" stroke-width="2" />
+                <!-- 炮管高光 -->
+                <rect x="582" y="56" width="196" height="6" rx="3" fill="#667a3d" opacity="0.6" />
+                <!-- 抽烟装置（炮管中段加粗） -->
+                <rect x="660" y="52" width="40" height="26" rx="5" fill="#55662e" stroke="#3d4a22" stroke-width="2" />
+                <rect x="662" y="54" width="36" height="6" rx="2" fill="#667a3d" opacity="0.5" />
+                <!-- 制退器（炮口） -->
+                <rect x="780" y="52" width="24" height="26" rx="4" fill="#4d5e2e" stroke="#3d4a22" stroke-width="2" />
+                <rect x="785" y="50" width="14" height="30" rx="3" fill="#3d4a22" />
+                <rect x="804" y="54" width="12" height="22" rx="3" fill="#3d4a22" stroke="#2a3318" stroke-width="1" />
+                <!-- 制退器槽口 -->
+                <line x1="788" y1="52" x2="788" y2="80" stroke="#2a3318" stroke-width="1.5" />
+                <line x1="794" y1="52" x2="794" y2="80" stroke="#2a3318" stroke-width="1.5" />
+
+                <!-- ====== 车顶机枪 ====== -->
+                <!-- 机枪座 -->
+                <circle cx="440" cy="45" r="5" fill="#444" stroke="#333" stroke-width="1" />
+                <rect x="437" y="36" width="6" height="11" rx="1.5" fill="#555" />
+                <!-- 机枪枪管 -->
+                <rect x="442" y="32" width="18" height="5" rx="2" fill="#3a3a3a" stroke="#2a2a2a" stroke-width="1" />
+                <!-- 弹链箱 -->
+                <rect x="424" y="40" width="14" height="9" rx="2" fill="#555" stroke="#444" stroke-width="1" />
+
+                <!-- ====== 烟雾弹发射器 ====== -->
+                <g fill="#3d4a22" stroke="#2a3318" stroke-width="1">
+                  <rect x="298" y="58" width="6" height="8" rx="1.5" />
+                  <rect x="308" y="57" width="6" height="8" rx="1.5" />
+                  <rect x="318" y="56" width="6" height="8" rx="1.5" />
+                  <rect x="328" y="57" width="6" height="8" rx="1.5" />
+                  <rect x="338" y="58" width="6" height="8" rx="1.5" />
+                </g>
+
+                <!-- ====== 附件 ====== -->
+                <!-- 备用履带板 -->
+                <rect x="360" y="112" width="28" height="10" rx="2" fill="#4a5238" stroke="#3a4028" stroke-width="1" />
+                <rect x="365" y="114" width="18" height="6" rx="1" fill="#3a4028" />
+                <!-- 自救木 -->
+                <rect x="400" y="114" width="50" height="9" rx="3" fill="#8a6840" stroke="#6a4a28" stroke-width="1.5" />
+                <!-- 天线 -->
+                <line x1="340" y1="40" x2="330" y2="4" stroke="#444" stroke-width="2" />
+                <circle cx="330" cy="3" r="2.5" fill="#555" />
+                <!-- 车尾油箱 -->
+                <rect x="112" y="136" width="30" height="18" rx="4" fill="#4d5e2e" stroke="#3d4a22" stroke-width="1.5" />
+                <rect x="116" y="140" width="22" height="10" rx="2" fill="#3d4a22" opacity="0.5" />
+              </svg>
+              <!-- 赛博皮卡 SVG（特斯拉赛博皮卡造型，蓝色车身，大轮胎） -->
+              <svg class="pickup-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="450" cy="244" rx="340" ry="10" fill="rgba(0,0,0,0.16)" />
+
+                <!-- ====== 大轮胎 ====== -->
+                <!-- 后轮（左，越野大胎） -->
+                <circle cx="300" cy="200" r="64" fill="#12151a" />
+                <circle cx="300" cy="200" r="56" fill="#1a1e24" />
+                <circle cx="300" cy="200" r="48" fill="#242830" />
+                <circle cx="300" cy="200" r="40" fill="#2d3238" />
+                <circle cx="300" cy="200" r="30" fill="#1a1e24" />
+                <!-- 后轮毂六角形 -->
+                <polygon points="300,178 319,189 319,211 300,222 281,211 281,189"
+                         fill="#606870" stroke="#484c50" stroke-width="2" />
+                <circle cx="300" cy="200" r="14" fill="#3a3e42" stroke="#2a2e32" stroke-width="1.5" />
+                <circle cx="300" cy="200" r="5" fill="#1a1e22" />
+                <!-- 胎面花纹 -->
+                <g stroke="#1a1e22" stroke-width="2" opacity="0.5">
+                  <line x1="300" y1="138" x2="300" y2="145" />
+                  <line x1="340" y1="145" x2="336" y2="152" />
+                  <line x1="362" y1="170" x2="356" y2="174" />
+                  <line x1="362" y1="230" x2="356" y2="226" />
+                  <line x1="340" y1="255" x2="336" y2="248" />
+                  <line x1="300" y1="262" x2="300" y2="255" />
+                  <line x1="260" y1="255" x2="264" y2="248" />
+                  <line x1="238" y1="230" x2="244" y2="226" />
+                  <line x1="238" y1="170" x2="244" y2="174" />
+                  <line x1="260" y1="145" x2="264" y2="152" />
+                </g>
+
+                <!-- 前轮（右，越野大胎） -->
+                <circle cx="650" cy="200" r="64" fill="#12151a" />
+                <circle cx="650" cy="200" r="56" fill="#1a1e24" />
+                <circle cx="650" cy="200" r="48" fill="#242830" />
+                <circle cx="650" cy="200" r="40" fill="#2d3238" />
+                <circle cx="650" cy="200" r="30" fill="#1a1e24" />
+                <polygon points="650,178 669,189 669,211 650,222 631,211 631,189"
+                         fill="#606870" stroke="#484c50" stroke-width="2" />
+                <circle cx="650" cy="200" r="14" fill="#3a3e42" stroke="#2a2e32" stroke-width="1.5" />
+                <circle cx="650" cy="200" r="5" fill="#1a1e22" />
+                <g stroke="#1a1e22" stroke-width="2" opacity="0.5">
+                  <line x1="650" y1="138" x2="650" y2="145" />
+                  <line x1="690" y1="145" x2="686" y2="152" />
+                  <line x1="712" y1="170" x2="706" y2="174" />
+                  <line x1="712" y1="230" x2="706" y2="226" />
+                  <line x1="690" y1="255" x2="686" y2="248" />
+                  <line x1="650" y1="262" x2="650" y2="255" />
+                  <line x1="610" y1="255" x2="614" y2="248" />
+                  <line x1="588" y1="230" x2="594" y2="226" />
+                  <line x1="588" y1="170" x2="594" y2="174" />
+                  <line x1="610" y1="145" x2="614" y2="152" />
+                </g>
+
+                <!-- ====== 底盘 ====== -->
+                <path d="M110 205 L790 205 L790 222 Q790 230 775 230 L125 230 Q110 230 110 222 Z"
+                      fill="#12161c" stroke="#0a0d11" stroke-width="2.5" />
+                <rect x="120" y="208" width="670" height="6" rx="2" fill="#1c2128" opacity="0.6" />
+
+                <!-- ====== 车身主体（蓝色，几何切割造型） ====== -->
+                <!-- 主车身 -->
+                <path d="M120 120 L420 120 L450 65 L590 65 L680 108 L770 125 L770 200 Q770 208 758 208 L132 208 Q120 208 120 200 Z"
+                      fill="#3a6db5" stroke="#285090" stroke-width="2.5" />
+                <!-- 车身高光面（上部亮色面板） -->
+                <path d="M135 125 L415 125 L445 72 L585 72 L670 112 L758 128 L758 170 L135 170 Z"
+                      fill="#4d86d0" stroke="none" opacity="0.6" />
+                <!-- 侧面折线（Cybertruck 标志性腰线） -->
+                <line x1="130" y1="150" x2="762" y2="150" stroke="#2a55a0" stroke-width="2" />
+                <line x1="125" y1="152" x2="765" y2="152" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+
+                <!-- ====== 后部货箱斗 ====== -->
+                <path d="M120 120 L420 120 L420 170 L120 170 Z"
+                      fill="#3565a8" stroke="#285090" stroke-width="1.5" />
+                <!-- 货箱底部暗色 -->
+                <rect x="122" y="160" width="296" height="10" rx="1" fill="#2a5090" opacity="0.5" />
+                <!-- 货箱侧板竖线 -->
+                <line x1="200" y1="122" x2="200" y2="170" stroke="#2a55a0" stroke-width="1.5" />
+                <line x1="280" y1="122" x2="280" y2="170" stroke="#2a55a0" stroke-width="1.5" />
+                <line x1="360" y1="122" x2="360" y2="170" stroke="#2a55a0" stroke-width="1.5" />
+                <!-- 后尾灯条 -->
+                <rect x="118" y="145" width="4" height="18" rx="1" fill="#ff3333" />
+                <rect x="120" y="148" width="6" height="12" rx="2" fill="#ff4444" opacity="0.9" />
+
+                <!-- ====== 驾驶室 ====== -->
+                <!-- 车顶（三角形峰造型） -->
+                <path d="M420 120 L450 65 L590 65 L590 120 Z"
+                      fill="#427bc4" stroke="#285090" stroke-width="1.5" />
+                <!-- 车顶峰值线（Cybertruck 独特造型） -->
+                <line x1="450" y1="65" x2="590" y2="65" stroke="#2a55a0" stroke-width="1.5" />
+                <line x1="450" y1="67" x2="590" y2="67" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+
+                <!-- ====== 车窗（深色，梯形/三角形） ====== -->
+                <!-- 后侧窗 -->
+                <path d="M428 118 L445 74 L510 74 L510 118 Z"
+                      fill="#1a222e" stroke="#10161e" stroke-width="1.5" />
+                <line x1="440" y1="80" x2="436" y2="116" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+                <!-- 前侧窗 -->
+                <path d="M525 74 L580 74 L580 118 L525 118 Z"
+                      fill="#1a222e" stroke="#10161e" stroke-width="1.5" />
+                <line x1="535" y1="78" x2="533" y2="116" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+                <!-- 挡风玻璃（大角度倾斜） -->
+                <path d="M590 74 L625 74 L678 110 L678 118 L590 118 Z"
+                      fill="#222e40" stroke="#10161e" stroke-width="1.5" />
+                <path d="M598 76 L630 76 L676 110 L676 118 L598 118 Z"
+                      fill="#2a3a52" opacity="0.5" />
+                <line x1="630" y1="76" x2="628" y2="117" stroke="rgba(255,255,255,0.06)" stroke-width="2" />
+
+                <!-- ====== 前引擎盖（几何平面） ====== -->
+                <path d="M680 108 L770 125 L770 150 L680 120 Z"
+                      fill="#4078c0" stroke="#285090" stroke-width="1" />
+                <path d="M682 112 L765 128 L765 148 L682 120 Z"
+                      fill="#4d86d0" opacity="0.4" />
+
+                <!-- ====== 前脸（垂直面） ====== -->
+                <path d="M760 128 L770 125 L770 200 Q770 208 758 208 L760 200 Z"
+                      fill="#3565a8" stroke="#285090" stroke-width="2" />
+                <!-- 前保险杠（金属色） -->
+                <rect x="762" y="175" width="10" height="33" rx="2" fill="#8a8e92" stroke="#606468" stroke-width="1.5" />
+                <!-- 前保险杠折线 -->
+                <line x1="762" y1="195" x2="772" y2="195" stroke="#5a5e62" stroke-width="1.5" />
+
+                <!-- ====== LED 贯穿式灯带（前脸顶部） ====== -->
+                <rect x="762" y="128" width="6" height="12" rx="2" fill="#e0f0ff" stroke="#b0d0ff" stroke-width="1" />
+                <rect x="764" y="130" width="2" height="8" rx="1" fill="#ffffff" opacity="0.9">
+                  <animate attributeName="opacity" values="0.6;1;0.6" dur="1.2s" repeatCount="indefinite" />
+                </rect>
+                <!-- 前灯条下部暗区 -->
+                <rect x="762" y="140" width="6" height="10" rx="1" fill="#1a1a1a" opacity="0.3" />
+
+                <!-- ====== 车轮拱罩（几何切割） ====== -->
+                <!-- 后轮拱（多边形切割，露出轮子上半部） -->
+                <path d="M236 155 L364 155 L374 170 L370 195 L360 208 L240 208 L230 195 L226 170 Z"
+                      fill="#3a6db5" stroke="#285090" stroke-width="2" />
+                <path d="M240 160 L360 160 L368 172 L364 193 L356 204 L244 204 L236 193 L232 172 Z"
+                      fill="#1a1e24" opacity="0.7" />
+                <!-- 前轮拱（多边形切割） -->
+                <path d="M586 155 L714 155 L724 170 L720 195 L710 208 L590 208 L580 195 L576 170 Z"
+                      fill="#3a6db5" stroke="#285090" stroke-width="2" />
+                <path d="M590 160 L710 160 L718 172 L714 193 L706 204 L594 204 L586 193 L582 172 Z"
+                      fill="#1a1e24" opacity="0.7" />
+
+                <!-- ====== 车门面板细节 ====== -->
+                <!-- 后门 -->
+                <rect x="510" y="120" width="2" height="48" fill="#285090" />
+                <!-- 前门 -->
+                <rect x="595" y="120" width="2" height="48" fill="#285090" />
+                <!-- 门把手（隐藏式，Cybertruck 特点） -->
+                <rect x="530" y="140" width="16" height="3" rx="1" fill="#285090" opacity="0.7" />
+                <rect x="610" y="140" width="16" height="3" rx="1" fill="#285090" opacity="0.7" />
+
+                <!-- ====== 侧裙底部黑色护板 ====== -->
+                <path d="M132 204 L758 204 L758 210 L132 210 Z" fill="#1a1e22" opacity="0.8" />
+
+                <!-- ====== 后视镜（几何造型） ====== -->
+                <path d="M585 78 L605 66 L612 82 L592 92 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1.5" />
+                <rect x="598" y="68" width="8" height="8" rx="1" fill="#5588cc" opacity="0.5" />
+
+                <!-- ====== "CYBERTRUCK" 字样 ====== -->
+                <text x="270" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#a0c8f0" font-family="Arial, sans-serif" letter-spacing="3" opacity="0.7">CYBERTRUCK</text>
+
+                <!-- ====== 车身面板交线（低多边形感） ====== -->
+                <line x1="420" y1="120" x2="420" y2="170" stroke="#285090" stroke-width="1" opacity="0.7" />
+              </svg>
+              <!-- 特警装甲车 SVG（黑色重装防爆车，红蓝警灯，POLICE 标识） -->
+              <svg class="swat-svg" viewBox="0 0 900 260" aria-hidden="true" focusable="false">
+                <!-- 地面阴影 -->
+                <ellipse cx="450" cy="244" rx="340" ry="10" fill="rgba(0,0,0,0.22)" />
+
+                <!-- ====== 重型轮胎 ====== -->
+                <!-- 后轮（左） -->
+                <circle cx="290" cy="200" r="58" fill="#0d0f12" />
+                <circle cx="290" cy="200" r="50" fill="#14171c" />
+                <circle cx="290" cy="200" r="40" fill="#1c2026" />
+                <circle cx="290" cy="200" r="28" fill="#282d35" />
+                <circle cx="290" cy="200" r="18" fill="#70767d" />
+                <circle cx="290" cy="200" r="9" fill="#4a4e54" />
+                <circle cx="290" cy="200" r="3" fill="#1c2026" />
+                <!-- 内轮（双轮效果） -->
+                <circle cx="290" cy="200" r="44" fill="#0f1216" />
+                <circle cx="290" cy="200" r="34" fill="#161a1f" />
+                <circle cx="290" cy="200" r="22" fill="#1e2328" />
+                <!-- 前轮（右） -->
+                <circle cx="650" cy="200" r="58" fill="#0d0f12" />
+                <circle cx="650" cy="200" r="50" fill="#14171c" />
+                <circle cx="650" cy="200" r="40" fill="#1c2026" />
+                <circle cx="650" cy="200" r="28" fill="#282d35" />
+                <circle cx="650" cy="200" r="18" fill="#70767d" />
+                <circle cx="650" cy="200" r="9" fill="#4a4e54" />
+                <circle cx="650" cy="200" r="3" fill="#1c2026" />
+                <circle cx="650" cy="200" r="44" fill="#0f1216" />
+                <circle cx="650" cy="200" r="34" fill="#161a1f" />
+                <circle cx="650" cy="200" r="22" fill="#1e2328" />
+
+                <!-- ====== 底盘 ====== -->
+                <path d="M120 198 L790 198 L790 216 Q790 226 772 226 L138 226 Q120 226 120 216 Z"
+                      fill="#0a0c0f" stroke="#050608" stroke-width="2.5" />
+                <rect x="130" y="202" width="660" height="7" rx="2" fill="#14181d" opacity="0.6" />
+
+                <!-- ====== 车身主体（黑色装甲） ====== -->
+                <!-- 下装甲板 -->
+                <path d="M130 120 L130 205 Q130 215 142 215 L768 215 Q780 215 780 205 L780 120 Z"
+                      fill="#1c1e22" stroke="#111316" stroke-width="2.5" />
+                <!-- 上装甲板（略深） -->
+                <path d="M140 120 L140 180 L770 180 L770 120 Z"
+                      fill="#22252a" stroke="#181a1f" stroke-width="1.5" />
+                <!-- 装甲折线（V形车底防雷设计） -->
+                <path d="M130 195 L450 175 L780 195" fill="none" stroke="#14161a" stroke-width="2" />
+                <path d="M130 196 L450 176 L780 196" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+
+                <!-- ====== 驾驶室（上方） ====== -->
+                <path d="M350 70 L580 70 L620 120 L320 120 Z"
+                      fill="#22252a" stroke="#181a1f" stroke-width="2" />
+                <!-- 车顶高光 -->
+                <rect x="355" y="72" width="220" height="4" rx="1" fill="#2a2e35" />
+
+                <!-- ====== 防弹车窗 ====== -->
+                <!-- 后侧窗 -->
+                <path d="M332 88 L370 76 L460 76 L460 112 L332 112 Z"
+                      fill="#1a3555" stroke="#050608" stroke-width="2" />
+                <line x1="345" y1="82" x2="340" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1.5" />
+                <!-- 前侧窗 -->
+                <path d="M480 76 L555 76 L555 112 L480 112 Z"
+                      fill="#1a3555" stroke="#050608" stroke-width="2" />
+                <line x1="490" y1="80" x2="488" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1.5" />
+                <!-- 挡风玻璃（倾斜） -->
+                <path d="M570 76 L615 76 L660 120 L570 120 Z"
+                      fill="#1e3d60" stroke="#050608" stroke-width="2" />
+                <path d="M575 80 L618 80 L656 118 L575 118 Z"
+                      fill="#264a70" opacity="0.6" />
+                <line x1="615" y1="80" x2="612" y2="118" stroke="rgba(255,255,255,0.03)" stroke-width="2" />
+
+                <!-- ====== 车顶警灯条 ====== -->
+                <rect x="370" y="56" width="190" height="16" rx="5" fill="#0d0d0d" stroke="#050505" stroke-width="2" />
+                <!-- 红灯罩 -->
+                <rect x="378" y="50" width="30" height="12" rx="4" fill="#cc1111" stroke="#880000" stroke-width="1.5" />
+                <circle cx="393" cy="56" r="8" fill="#ff3333" opacity="0.5">
+                  <animate attributeName="opacity" values="0.3;1;0.3" dur="0.35s" repeatCount="indefinite" />
+                </circle>
+                <!-- 蓝灯罩 -->
+                <rect x="420" y="50" width="30" height="12" rx="4" fill="#1133cc" stroke="#001188" stroke-width="1.5" />
+                <circle cx="435" cy="56" r="8" fill="#3366ff" opacity="0.95">
+                  <animate attributeName="opacity" values="0.95;0.15;0.95" dur="0.35s" repeatCount="indefinite" />
+                </circle>
+                <!-- 红灯 -->
+                <rect x="462" y="50" width="30" height="12" rx="4" fill="#cc1111" stroke="#880000" stroke-width="1.5" />
+                <circle cx="477" cy="56" r="8" fill="#ff3333" opacity="0.85">
+                  <animate attributeName="opacity" values="0.85;0.1;0.85" dur="0.4s" repeatCount="indefinite" />
+                </circle>
+                <!-- 蓝灯 -->
+                <rect x="504" y="50" width="30" height="12" rx="4" fill="#1133cc" stroke="#001188" stroke-width="1.5" />
+                <circle cx="519" cy="56" r="8" fill="#3366ff" opacity="0.4">
+                  <animate attributeName="opacity" values="0.15;0.95;0.15" dur="0.4s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- ====== 后部乘员舱 ====== -->
+                <path d="M140 120 L320 120 L320 180 L140 180 Z"
+                      fill="#1e2025" stroke="#16181d" stroke-width="1.5" />
+                <rect x="150" y="128" width="80" height="44" rx="2" fill="#1a3555" stroke="#050608" stroke-width="1.5" />
+                <line x1="160" y1="135" x2="158" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1.5" />
+                <rect x="240" y="128" width="60" height="44" rx="2" fill="#1a3555" stroke="#050608" stroke-width="1.5" />
+
+                <!-- ====== 前引擎舱（倾斜装甲） ====== -->
+                <path d="M660 120 L780 120 L780 142 L660 132 Z"
+                      fill="#1e2025" stroke="#16181d" stroke-width="1.5" />
+                <!-- 引擎舱散热格栅 -->
+                <g stroke="#2a2e35" stroke-width="1.5" opacity="0.8">
+                  <line x1="675" y1="125" x2="672" y2="139" />
+                  <line x1="690" y1="126" x2="687" y2="139" />
+                  <line x1="705" y1="127" x2="702" y2="140" />
+                  <line x1="720" y1="128" x2="717" y2="141" />
+                  <line x1="735" y1="129" x2="732" y2="141" />
+                  <line x1="750" y1="130" x2="747" y2="142" />
+                  <line x1="765" y1="131" x2="762" y2="142" />
+                </g>
+
+                <!-- ====== 前脸（垂直） ====== -->
+                <path d="M770 120 L780 120 L780 142 L770 142 Z"
+                      fill="#1a1d22" stroke="#111316" stroke-width="1.5" />
+                <!-- 前大灯（小，嵌入式） -->
+                <rect x="772" y="124" width="6" height="8" rx="1" fill="#fff8e0" stroke="#cccccc" stroke-width="1" />
+                <rect x="773" y="126" width="4" height="4" rx="1" fill="#ffffff" />
+                <!-- 前转向灯 -->
+                <rect x="772" y="135" width="6" height="4" rx="1" fill="#ff9900" stroke="#cc7700" stroke-width="0.5" />
+
+                <!-- ====== 前防撞推杆 ====== -->
+                <rect x="776" y="145" width="6" height="60" rx="2" fill="#3a3e44" stroke="#282c32" stroke-width="1.5" />
+                <rect x="774" y="148" width="10" height="8" rx="2" fill="#4a4e54" stroke="#3a3e44" stroke-width="1" />
+                <rect x="774" y="194" width="10" height="8" rx="2" fill="#4a4e54" stroke="#3a3e44" stroke-width="1" />
+
+                <!-- ====== 车尾 ====== -->
+                <rect x="128" y="145" width="4" height="22" rx="1" fill="#dd2222" stroke="#991111" stroke-width="1" />
+                <rect x="128" y="150" width="6" height="12" rx="1" fill="#ff3333" opacity="0.7" />
+
+                <!-- ====== 后防撞杠 ====== -->
+                <rect x="120" y="145" width="8" height="55" rx="2" fill="#3a3e44" stroke="#282c32" stroke-width="1.5" />
+
+                <!-- ====== 侧裙装甲 ====== -->
+                <path d="M142 205 L768 205 L768 210 L142 210 Z" fill="#0d0f13" />
+                <!-- 脚踏板 -->
+                <rect x="400" y="208" width="50" height="8" rx="2" fill="#2a2e34" stroke="#1e2228" stroke-width="1" />
+                <rect x="480" y="208" width="50" height="8" rx="2" fill="#2a2e34" stroke="#1e2228" stroke-width="1" />
+
+                <!-- ====== 车门装甲板接缝 ====== -->
+                <line x1="460" y1="120" x2="460" y2="205" stroke="#111316" stroke-width="2" />
+                <line x1="555" y1="120" x2="555" y2="205" stroke="#111316" stroke-width="2" />
+                <!-- 门铰链/铆钉 -->
+                <circle cx="462" cy="130" r="2.5" fill="#3a3e44" />
+                <circle cx="462" cy="150" r="2.5" fill="#3a3e44" />
+                <circle cx="462" cy="170" r="2.5" fill="#3a3e44" />
+                <circle cx="553" cy="130" r="2.5" fill="#3a3e44" />
+                <circle cx="553" cy="150" r="2.5" fill="#3a3e44" />
+                <circle cx="553" cy="170" r="2.5" fill="#3a3e44" />
+
+                <!-- ====== 门把手（嵌入式） ====== -->
+                <rect x="470" y="148" width="20" height="4" rx="2" fill="#3a3e44" stroke="#2a2e34" stroke-width="1" />
+                <rect x="565" y="148" width="20" height="4" rx="2" fill="#3a3e44" stroke="#2a2e34" stroke-width="1" />
+
+                <!-- ====== 警徽 ====== -->
+                <circle cx="395" cy="155" r="18" fill="#c8a830" stroke="#9a8020" stroke-width="2" />
+                <circle cx="395" cy="155" r="14" fill="#d8b840" stroke="#a88828" stroke-width="1" />
+                <path d="M388 147 L402 147 L395 138 Z" fill="#1a1a1a" />
+                <text x="395" y="160" text-anchor="middle" font-size="7" font-weight="900" fill="#1a1a1a" font-family="Arial, sans-serif">POLICE</text>
+                <!-- 警徽星芒 -->
+                <g stroke="#9a8020" stroke-width="0.8" opacity="0.6">
+                  <line x1="395" y1="139" x2="395" y2="135" />
+                  <line x1="405" y1="145" x2="408" y2="142" />
+                  <line x1="408" y1="156" x2="412" y2="156" />
+                  <line x1="405" y1="167" x2="408" y2="170" />
+                  <line x1="385" y1="145" x2="382" y2="142" />
+                  <line x1="382" y1="156" x2="378" y2="156" />
+                  <line x1="385" y1="167" x2="382" y2="170" />
+                </g>
+
+                <!-- ====== 车身 "POLICE" 大字 ====== -->
+                <text x="560" y="165" text-anchor="middle" font-size="24" font-weight="900" fill="#c8c8c8" font-family="Arial, sans-serif" letter-spacing="4">POLICE</text>
+                <text x="560" y="166" text-anchor="middle" font-size="24" font-weight="900" fill="#e0e0e0" font-family="Arial, sans-serif" letter-spacing="4" opacity="0.3">POLICE</text>
+
+                <!-- ====== 后视镜 ====== -->
+                <path d="M565 82 L585 72 L592 86 L572 96 Z" fill="#1a1a1a" stroke="#0d0d0d" stroke-width="1.5" />
+                <rect x="578" y="74" width="7" height="7" rx="1" fill="#333333" opacity="0.5" />
+                <!-- 左侧后视镜 -->
+                <path d="M340 82 L320 72 L313 86 L333 96 Z" fill="#1a1a1a" stroke="#0d0d0d" stroke-width="1.5" />
+                <rect x="322" y="74" width="7" height="7" rx="1" fill="#333333" opacity="0.5" />
+
+                <!-- ====== 车顶舱盖 ====== -->
+                <rect x="440" y="58" width="50" height="14" rx="3" fill="#2a2e35" stroke="#1a1d22" stroke-width="1.5" />
+                <rect x="445" y="60" width="40" height="10" rx="2" fill="#1a1d22" />
+                <circle cx="465" cy="65" r="2" fill="#3a3e44" />
+
+                <!-- ====== 天线 ====== -->
+                <line x1="550" y1="56" x2="545" y2="8" stroke="#2a2a2a" stroke-width="2.5" />
+                <circle cx="545" cy="6" r="3" fill="#3a3a3a" />
+
+                <!-- ====== 前牵引环 ====== -->
+                <circle cx="780" cy="192" r="5" fill="none" stroke="#4a4e54" stroke-width="2.5" />
+
+                <!-- ====== 排气管（侧面） ====== -->
+                <rect x="190" y="215" width="16" height="6" rx="2" fill="#3a3e44" stroke="#2a2e34" stroke-width="1" />
+                <rect x="206" y="215" width="4" height="6" rx="1" fill="#2a2e34" />
+
+                <!-- ====== 车身编号 ====== -->
+                <text x="230" y="138" text-anchor="middle" font-size="11" font-weight="700" fill="#555555" font-family="Arial, sans-serif" letter-spacing="2">SWAT-01</text>
+              </svg>
               <div id="roadCarBadge" class="road-car-badge">默认车型</div>
             </div>
             <div class="water-splash" id="waterSplash"></div>
             <div class="road-obstacle" id="roadObstacle">路障</div>
             <div class="road-fx" id="roadFx"></div>
             <div class="crash-explosion" id="roadCrashExplosion" aria-hidden="true">
+              <span class="flash-core"></span>
+              <span class="fireball"></span>
+              <span class="fireball-inner"></span>
+              <span class="shockwave sw1"></span>
+              <span class="shockwave sw2"></span>
+              <span class="shockwave sw3"></span>
+              <span class="smoke sk1"></span>
+              <span class="smoke sk2"></span>
+              <span class="smoke sk3"></span>
+              <span class="smoke sk4"></span>
+              <span class="smoke sk5"></span>
               <span class="spark s1"></span>
               <span class="spark s2"></span>
               <span class="spark s3"></span>
@@ -287,6 +1599,18 @@
               <span class="spark s6"></span>
               <span class="spark s7"></span>
               <span class="spark s8"></span>
+              <span class="spark s9"></span>
+              <span class="spark s10"></span>
+              <span class="spark s11"></span>
+              <span class="spark s12"></span>
+              <span class="spark s13"></span>
+              <span class="spark s14"></span>
+              <span class="spark s15"></span>
+              <span class="spark s16"></span>
+              <span class="spark s17"></span>
+              <span class="spark s18"></span>
+              <span class="spark s19"></span>
+              <span class="spark s20"></span>
             </div>
           </div>
 
@@ -311,6 +1635,9 @@
     </main>
 
     <script src="app.core.js"></script>
-    <script src="app.js"></script>
+    <script src="app.market.js"></script>
+    <script src="app.admin.js"></script>
+    <script src="app.game.js"></script>
+    <script>window.bootstrapApp();</script>
   </body>
 </html>

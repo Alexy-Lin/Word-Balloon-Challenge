@@ -19,6 +19,43 @@ def is_total_row(chinese_value):
     return normalized in {"totalscore", "totlascore"}
 
 
+def _clean_str_list(items, ensure_default=None):
+    cleaned = []
+    for item in items:
+        val = str(item).strip()
+        if not val:
+            continue
+        if val not in cleaned:
+            cleaned.append(val)
+    if ensure_default is not None and ensure_default not in cleaned:
+        cleaned.append(ensure_default)
+    return cleaned
+
+
+def _clean_int_dict(raw):
+    cleaned = {}
+    for k, v in raw.items():
+        key = str(k).strip()
+        if not key:
+            continue
+        try:
+            cleaned[key] = max(0, int(v))
+        except Exception:
+            cleaned[key] = 0
+    return cleaned
+
+
+def _write_csv(words):
+    total = sum(w["score"] for w in words)
+    with open(CSV_PATH, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["中文", "英文", "unit", "status", "score"])
+        for w in words:
+            writer.writerow([w["chinese"], w["english"], w["unit"], w["status"], w["score"]])
+        writer.writerow(["total score", "", "", "", total])
+    return total
+
+
 def load_words():
     if not os.path.exists(CSV_PATH):
         return []
@@ -112,27 +149,11 @@ def normalize_meta(meta, words=None):
 
     earned_words = meta.get("goldEarnedWords", [])
     if isinstance(earned_words, list):
-        cleaned_words = []
-        for item in earned_words:
-            word = str(item).strip()
-            if not word:
-                continue
-            if word not in cleaned_words:
-                cleaned_words.append(word)
-        base["goldEarnedWords"] = cleaned_words
+        base["goldEarnedWords"] = _clean_str_list(earned_words)
 
     owned_vehicle_ids = meta.get("ownedVehicleIds", ["default_bugatti"])
     if isinstance(owned_vehicle_ids, list):
-        cleaned_owned = []
-        for item in owned_vehicle_ids:
-            vehicle_id = str(item).strip()
-            if not vehicle_id:
-                continue
-            if vehicle_id not in cleaned_owned:
-                cleaned_owned.append(vehicle_id)
-        if "default_bugatti" not in cleaned_owned:
-            cleaned_owned.append("default_bugatti")
-        base["ownedVehicleIds"] = cleaned_owned
+        base["ownedVehicleIds"] = _clean_str_list(owned_vehicle_ids, "default_bugatti")
 
     equipped_vehicle_id = str(meta.get("equippedVehicleId", base.get("equippedVehicleId", "default_bugatti"))).strip()
     if equipped_vehicle_id and equipped_vehicle_id in base.get("ownedVehicleIds", ["default_bugatti"]):
@@ -142,16 +163,7 @@ def normalize_meta(meta, words=None):
 
     owned_effect_ids = meta.get("ownedEffectIds", ["effect_default"])
     if isinstance(owned_effect_ids, list):
-        cleaned_effects = []
-        for item in owned_effect_ids:
-            effect_id = str(item).strip()
-            if not effect_id:
-                continue
-            if effect_id not in cleaned_effects:
-                cleaned_effects.append(effect_id)
-        if "effect_default" not in cleaned_effects:
-            cleaned_effects.append("effect_default")
-        base["ownedEffectIds"] = cleaned_effects
+        base["ownedEffectIds"] = _clean_str_list(owned_effect_ids, "effect_default")
 
     equipped_effect_id = str(meta.get("equippedEffectId", base.get("equippedEffectId", "effect_default"))).strip()
     if equipped_effect_id and equipped_effect_id in base.get("ownedEffectIds", ["effect_default"]):
@@ -161,26 +173,11 @@ def normalize_meta(meta, words=None):
 
     review_counts = meta.get("reviewCounts", {})
     if isinstance(review_counts, dict):
-        cleaned = {}
-        for k, v in review_counts.items():
-            unit = str(k).strip()
-            if not unit:
-                continue
-            try:
-                cleaned[unit] = max(0, int(v))
-            except Exception:
-                cleaned[unit] = 0
-        base["reviewCounts"] = cleaned
+        base["reviewCounts"] = _clean_int_dict(review_counts)
 
     units = meta.get("units", [])
     if isinstance(units, list):
-        cleaned_units = []
-        for u in units:
-            name = str(u).strip()
-            if not name:
-                continue
-            if name not in cleaned_units:
-                cleaned_units.append(name)
+        cleaned_units = _clean_str_list(units)
         if cleaned_units:
             base["units"] = cleaned_units
     return base
@@ -240,15 +237,7 @@ def save_words(updated_items):
             }
         )
 
-    total = sum(w["score"] for w in merged)
-
-    with open(CSV_PATH, "w", encoding="utf-8-sig", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["中文", "英文", "unit", "status", "score"])
-        for w in merged:
-            writer.writerow([w["chinese"], w["english"], w["unit"], w["status"], w["score"]])
-        writer.writerow(["totla score", "", "", "", total])
-
+    total = _write_csv(merged)
     return merged, total
 
 
@@ -281,14 +270,7 @@ def save_all_words(words_payload):
             }
         )
 
-    total = sum(w["score"] for w in normalized)
-    with open(CSV_PATH, "w", encoding="utf-8-sig", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["中文", "英文", "unit", "status", "score"])
-        for w in normalized:
-            writer.writerow([w["chinese"], w["english"], w["unit"], w["status"], w["score"]])
-        writer.writerow(["totla score", "", "", "", total])
-
+    total = _write_csv(normalized)
     return normalized, total
 
 
@@ -310,30 +292,31 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _build_response(self, words, meta, total, extra=None):
+        data = {
+            "words": words,
+            "totalScore": total,
+            "cumulativeScore": int(meta.get("cumulativeScore", total)),
+            "silverCoins": int(meta.get("silverCoins", meta.get("cumulativeScore", total))),
+            "goldCoins": int(meta.get("goldCoins", 0)),
+            "goldEarnedWords": meta.get("goldEarnedWords", []),
+            "ownedVehicleIds": meta.get("ownedVehicleIds", ["default_bugatti"]),
+            "equippedVehicleId": meta.get("equippedVehicleId", "default_bugatti"),
+            "ownedEffectIds": meta.get("ownedEffectIds", ["effect_default"]),
+            "equippedEffectId": meta.get("equippedEffectId", "effect_default"),
+            "reviewCounts": meta.get("reviewCounts", {}),
+            "units": meta.get("units", sorted({w["unit"] for w in words})),
+        }
+        if extra:
+            data.update(extra)
+        return self._json(data)
+
     def do_GET(self):
         if self.path == "/api/words":
             words = load_words()
             total = sum(w["score"] for w in words)
             meta = load_meta(words)
-            review_counts = meta.get("reviewCounts", {})
-            total_review_completions = sum(int(v) for v in review_counts.values())
-            return self._json(
-                {
-                    "words": words,
-                    "totalScore": total,
-                    "cumulativeScore": int(meta.get("cumulativeScore", total)),
-                    "silverCoins": int(meta.get("silverCoins", meta.get("cumulativeScore", total))),
-                    "goldCoins": int(meta.get("goldCoins", 0)),
-                    "goldEarnedWords": meta.get("goldEarnedWords", []),
-                    "ownedVehicleIds": meta.get("ownedVehicleIds", ["default_bugatti"]),
-                    "equippedVehicleId": meta.get("equippedVehicleId", "default_bugatti"),
-                    "ownedEffectIds": meta.get("ownedEffectIds", ["effect_default"]),
-                    "equippedEffectId": meta.get("equippedEffectId", "effect_default"),
-                    "reviewCounts": review_counts,
-                    "units": meta.get("units", sorted({w["unit"] for w in words})),
-                    "totalReviewCompletions": total_review_completions,
-                }
-            )
+            return self._build_response(words, meta, total)
         return super().do_GET()
 
     def do_POST(self):
@@ -358,40 +341,8 @@ class Handler(SimpleHTTPRequestHandler):
 
         incoming_meta = data.get("meta", {}) if isinstance(data, dict) else {}
         current_meta = load_meta(merged)
-        merged_meta = {
-            "cumulativeScore": incoming_meta.get("cumulativeScore", current_meta.get("cumulativeScore", total)),
-            "silverCoins": incoming_meta.get(
-                "silverCoins",
-                incoming_meta.get("cumulativeScore", current_meta.get("silverCoins", current_meta.get("cumulativeScore", total))),
-            ),
-            "goldCoins": incoming_meta.get("goldCoins", current_meta.get("goldCoins", 0)),
-            "goldEarnedWords": incoming_meta.get("goldEarnedWords", current_meta.get("goldEarnedWords", [])),
-            "ownedVehicleIds": incoming_meta.get("ownedVehicleIds", current_meta.get("ownedVehicleIds", ["default_bugatti"])),
-            "equippedVehicleId": incoming_meta.get("equippedVehicleId", current_meta.get("equippedVehicleId", "default_bugatti")),
-            "ownedEffectIds": incoming_meta.get("ownedEffectIds", current_meta.get("ownedEffectIds", ["effect_default"])),
-            "equippedEffectId": incoming_meta.get("equippedEffectId", current_meta.get("equippedEffectId", "effect_default")),
-            "reviewCounts": incoming_meta.get("reviewCounts", current_meta.get("reviewCounts", {})),
-            "units": incoming_meta.get("units", current_meta.get("units", sorted({w["unit"] for w in merged}))),
-        }
-        saved_meta = save_meta(merged_meta)
-
-        return self._json(
-            {
-                "ok": True,
-                "words": merged,
-                "totalScore": total,
-                "cumulativeScore": int(saved_meta.get("cumulativeScore", total)),
-                "silverCoins": int(saved_meta.get("silverCoins", saved_meta.get("cumulativeScore", total))),
-                "goldCoins": int(saved_meta.get("goldCoins", 0)),
-                "goldEarnedWords": saved_meta.get("goldEarnedWords", []),
-                "ownedVehicleIds": saved_meta.get("ownedVehicleIds", ["default_bugatti"]),
-                "equippedVehicleId": saved_meta.get("equippedVehicleId", "default_bugatti"),
-                "ownedEffectIds": saved_meta.get("ownedEffectIds", ["effect_default"]),
-                "equippedEffectId": saved_meta.get("equippedEffectId", "effect_default"),
-                "reviewCounts": saved_meta.get("reviewCounts", {}),
-                "units": saved_meta.get("units", sorted({w["unit"] for w in merged})),
-            }
-        )
+        saved_meta = save_meta({**current_meta, **incoming_meta})
+        return self._build_response(merged, saved_meta, total, extra={"ok": True})
 
 
 if __name__ == "__main__":
